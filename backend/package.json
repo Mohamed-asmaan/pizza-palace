@@ -1,0 +1,43 @@
+{
+  "name": "pizza-palace-backend",
+  "version": "1.0.0",
+  "description": "Pizza Palace REST API — MERN Stack Online Food Ordering Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "seed": "node seed.js",
+    "test": "jest --coverage --forceExit --runInBand",
+    "test:watch": "jest --watch"
+  },
+  "keywords": ["pizza", "mern", "express", "mongodb"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "jest": "^30.0.0",
+    "mongodb-memory-server": "^10.1.4",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "controllers/**/*.js",
+      "middleware/**/*.js",
+      "models/**/*.js"
+    ],
+    "testMatch": ["**/tests/**/*.test.js"]
+  }
+}

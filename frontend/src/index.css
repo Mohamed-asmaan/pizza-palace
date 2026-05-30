@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neutral-light text-neutral-dark font-sans antialiased;
+  }
+
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors focus-visible:ring-primary;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors focus-visible:ring-secondary;
+  }
+
+  .input-field {
+    @apply w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-primary focus:ring-1 focus:ring-primary;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-md overflow-hidden;
+  }
+}
