@@ -13,8 +13,14 @@ const requestLogger = require('./middleware/requestLogger');
 const app = express();
 
 const allowedOrigins = [
-  process.env.CLIENT_URL || 'http://localhost:5173',
-  'http://localhost:3000',
+  ...new Set([
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://pizza-palace-gules.vercel.app',
+    ...(process.env.CLIENT_URL
+      ? process.env.CLIENT_URL.split(',').map((origin) => origin.trim()).filter(Boolean)
+      : []),
+  ]),
 ];
 
 app.use(helmet());

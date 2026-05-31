@@ -54,15 +54,23 @@ Auth header: `Authorization: Bearer <token>`
 
 ## Deployment
 
-| Layer    | Platform       |
-|----------|----------------|
-| Frontend | Vercel         |
-| Backend  | Render         |
-| Database | MongoDB Atlas  |
+| Layer    | Platform       | URL |
+|----------|----------------|-----|
+| Frontend | Vercel         | https://pizza-palace-gules.vercel.app |
+| Backend  | Render         | https://pizza-palace-api-6udi.onrender.com |
+| Database | MongoDB Atlas  | `pizza-palace` database |
 
-Set environment variables on Render: `MONGO_URI`, `JWT_SECRET`, `NODE_ENV=production`, `CLIENT_URL`
+**Render** environment variables:
+- `MONGO_URI` — Atlas connection string with `/pizza-palace`
+- `JWT_SECRET` — long random secret
+- `NODE_ENV` — `production`
+- `CLIENT_URL` — `https://pizza-palace-gules.vercel.app`
 
-Set on Vercel: `VITE_API_URL=https://your-api.onrender.com/api`
+**Vercel** — API URL is configured in code (`frontend/.env.production` and `frontend/src/services/api.js`). No dashboard env vars required.
+
+**Vercel** live URL: https://pizza-palace-gules.vercel.app
+
+**Render** live API: https://pizza-palace-api-6udi.onrender.com/api
 
 ## Tests
 
