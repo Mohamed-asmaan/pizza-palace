@@ -29,13 +29,13 @@ cd backend
 npm install
 cp .env.example .env
 # Edit .env with your MONGO_URI and JWT_SECRET
-npm run seed    # Seed admin, demo customer, and sample pizzas
-npm run dev     # Start on http://localhost:5000
+npm run import-catalog   # Load menu from backend/data/pizzas.json into MongoDB
+npm run dev              # Start on http://localhost:5000
 ```
 
-**Default credentials (after seed):**
-- Admin: `admin@pizzapalace.com` / `admin123`
-- Customer: `customer@pizzapalace.com` / `customer123`
+Menu data lives in `backend/data/pizzas.json` and is stored in MongoDB. The frontend always loads pizzas from `GET /api/pizzas`.
+
+Users create real accounts via **Register** on the site. Optional admin account: set `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME` in `.env` before running `import-catalog`.
 
 ### Frontend
 
@@ -65,6 +65,9 @@ Auth header: `Authorization: Bearer <token>`
 - `JWT_SECRET` — long random secret
 - `NODE_ENV` — `production`
 - `CLIENT_URL` — `https://pizza-palace-gules.vercel.app`
+- `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` — optional, creates admin on first catalog import
+
+On first deploy, the server imports `backend/data/pizzas.json` into MongoDB when the menu is empty.
 
 **Vercel** — API URL is configured in code (`frontend/.env.production` and `frontend/src/services/api.js`). No dashboard env vars required.
 
