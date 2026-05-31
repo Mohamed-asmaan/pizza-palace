@@ -99,7 +99,14 @@ const Checkout = () => {
       }
     } catch (err) {
       if (err.message !== 'Payment cancelled') {
-        toast.error(err.response?.data?.message || err.message || 'Failed to place order');
+        var apiMsg = err.response && err.response.data && err.response.data.message;
+        var validationMsg =
+          err.response &&
+          err.response.data &&
+          err.response.data.errors &&
+          err.response.data.errors[0] &&
+          err.response.data.errors[0].message;
+        toast.error(apiMsg || validationMsg || err.message || 'Failed to place order');
       }
     } finally {
       setLoading(false);

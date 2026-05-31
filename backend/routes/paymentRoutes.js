@@ -13,7 +13,12 @@ const router = express.Router();
 const orderItemsValidation = [
   body('items').isArray({ min: 1 }).withMessage('Order must contain at least one item'),
   body('items.*.pizza').notEmpty().withMessage('Pizza ID is required'),
-  body('items.*.qty').isInt({ min: 1 }).withMessage('Quantity must be at least 1'),
+  body('items.*.qty')
+    .custom(function (val) {
+      var n = Number(val);
+      return Number.isInteger(n) && n >= 1;
+    })
+    .withMessage('Quantity must be at least 1'),
 ];
 
 router.get('/config', getPaymentConfig);

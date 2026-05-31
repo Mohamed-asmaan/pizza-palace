@@ -78,10 +78,13 @@ const createPaymentOrder = async (req, res, next) => {
       });
     }
 
+    // razorpay receipt max 40 chars - keep it short
+    var receiptId = 'pp' + Date.now();
+
     const razorpayOrder = await razorpay.orders.create({
       amount: amountInPaise,
       currency: 'INR',
-      receipt: `order_${req.user._id}_${Date.now()}`,
+      receipt: receiptId,
       notes: {
         customerId: req.user._id.toString(),
         itemCount: String(orderItems.length),
@@ -104,6 +107,14 @@ const createPaymentOrder = async (req, res, next) => {
         success: false,
         message: error.message,
         statusCode: error.statusCode,
+      });
+    }
+    // show razorpay api error message if available
+    if (error.error && error.error.description) {
+      return res.status(400).json({
+        success: false,
+        message: error.error.description,
+        statusCode: 400,
       });
     }
     next(error);
