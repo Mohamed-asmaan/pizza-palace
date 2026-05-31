@@ -9,6 +9,7 @@ const pizzaRoutes = require('./routes/pizzaRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const errorHandler = require('./middleware/errorHandler');
 const requestLogger = require('./middleware/requestLogger');
+const { seedDatabase } = require('./utils/seedDatabase');
 
 const app = express();
 
@@ -56,6 +57,7 @@ const startServer = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('MongoDB connected');
+    await seedDatabase();
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
