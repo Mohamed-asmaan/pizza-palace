@@ -69,11 +69,21 @@ Auth header: `Authorization: Bearer <token>`
 
 On first deploy, the server imports `backend/data/pizzas.json` into MongoDB when the menu is empty.
 
-**Razorpay** (payments):
-- `RAZORPAY_KEY_ID` — from Razorpay dashboard (test or live key)
-- `RAZORPAY_KEY_SECRET` — secret key (Render env only, never commit)
+**Razorpay Test Mode** (no real payments):
+1. Go to https://dashboard.razorpay.com → **Settings → API Keys**
+2. Click **Generate Test Key** (Key ID starts with `rzp_test_`)
+3. Add to **Render** env vars:
+   - `RAZORPAY_KEY_ID` = `rzp_test_xxxxxxxx`
+   - `RAZORPAY_KEY_SECRET` = your test secret
+4. Redeploy backend
 
-When Razorpay keys are set, checkout uses online payment. Without keys, checkout falls back to cash on delivery.
+**Test payment details** (Razorpay sandbox):
+- Card: `4111 4111 4111 4111`
+- Expiry: any future date
+- CVV: any 3 digits
+- UPI: `success@razorpay`
+
+Live keys (`rzp_live_*`) are blocked in this project. Without test keys, checkout uses cash on delivery.
 
 **Vercel** — API URL is configured in code (`frontend/.env.production` and `frontend/src/services/api.js`). No dashboard env vars required.
 

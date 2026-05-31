@@ -15,12 +15,19 @@ const Checkout = () => {
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [paymentEnabled, setPaymentEnabled] = useState(false);
+  const [testMode, setTestMode] = useState(false);
 
   useEffect(() => {
     paymentAPI
       .getConfig()
-      .then((res) => setPaymentEnabled(res.data.data.enabled))
-      .catch(() => setPaymentEnabled(false));
+      .then((res) => {
+        setPaymentEnabled(res.data.data.enabled);
+        setTestMode(res.data.data.testMode);
+      })
+      .catch(() => {
+        setPaymentEnabled(false);
+        setTestMode(false);
+      });
   }, []);
 
   if (items.length === 0) {
@@ -121,18 +128,28 @@ const Checkout = () => {
 
           <div className="mb-4 rounded-lg bg-gray-50 border border-gray-200 p-4">
             <p className="text-sm font-semibold text-neutral-dark mb-1">Payment</p>
+            {testMode && (
+              <p className="text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 mb-2 inline-block">
+                Razorpay Test Mode — no real money charged
+              </p>
+            )}
             <p className="text-sm text-gray-600">
               {paymentEnabled
-                ? 'Pay securely with Razorpay (UPI, card, netbanking, wallet).'
+                ? 'Pay with Razorpay test checkout (UPI, card, netbanking, wallet).'
                 : 'Cash on delivery — pay when your order arrives.'}
             </p>
+            {testMode && (
+              <p className="text-xs text-gray-500 mt-2">
+                Test card: 4111 4111 4111 4111 · any future expiry · any CVV
+              </p>
+            )}
           </div>
 
           <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">
             {loading
               ? 'Processing...'
               : paymentEnabled
-                ? `Pay ${formatPrice(total)} with Razorpay`
+                ? `Pay ${formatPrice(total)} (Test)`
                 : 'Place Order'}
           </button>
           <Link to="/cart" className="block text-center text-primary mt-3 hover:underline">

@@ -11,17 +11,30 @@ const getRazorpayInstance = () => {
     return null;
   }
 
+  if (!keyId.startsWith('rzp_test_')) {
+    throw Object.assign(new Error('Only Razorpay test keys (rzp_test_*) are allowed'), {
+      statusCode: 500,
+    });
+  }
+
   return new Razorpay({ key_id: keyId, key_secret: keySecret });
+};
+
+const isTestMode = () => {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  return Boolean(keyId && process.env.RAZORPAY_KEY_SECRET && keyId.startsWith('rzp_test_'));
 };
 
 const getPaymentConfig = (req, res) => {
   const keyId = process.env.RAZORPAY_KEY_ID;
+  const enabled = isTestMode();
 
   res.status(200).json({
     success: true,
     data: {
-      enabled: Boolean(keyId && process.env.RAZORPAY_KEY_SECRET),
-      keyId: keyId || null,
+      enabled,
+      testMode: enabled,
+      keyId: enabled ? keyId : null,
       currency: 'INR',
     },
   });
@@ -29,7 +42,17 @@ const getPaymentConfig = (req, res) => {
 
 const createPaymentOrder = async (req, res, next) => {
   try {
-    const razorpay = getRazorpayInstance();
+    let razorpay;
+    try {
+      razorpay = getRazorpayInstance();
+    } catch (error) {
+      return res.status(error.statusCode || 500).json({
+        success: false,
+        message: error.message,
+        statusCode: error.statusCode || 500,
+      });
+    }
+
     if (!razorpay) {
       return res.status(503).json({
         success: false,
