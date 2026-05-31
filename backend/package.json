@@ -11,7 +11,12 @@
     "test": "jest --coverage --forceExit --runInBand",
     "test:watch": "jest --watch"
   },
-  "keywords": ["pizza", "mern", "express", "mongodb"],
+  "keywords": [
+    "pizza",
+    "mern",
+    "express",
+    "mongodb"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -23,7 +28,8 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "razorpay": "^2.9.6"
   },
   "devDependencies": {
     "jest": "^30.0.0",
@@ -39,6 +45,8 @@
       "middleware/**/*.js",
       "models/**/*.js"
     ],
-    "testMatch": ["**/tests/**/*.test.js"]
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
   }
 }

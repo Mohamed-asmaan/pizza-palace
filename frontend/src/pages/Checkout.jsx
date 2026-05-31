@@ -1,21 +1,79 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useCart } from '../context/CartContext';
-import { orderAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
+import { orderAPI, paymentAPI } from '../services/api';
 import { formatPrice } from '../utils/format';
+import { loadRazorpayScript, openRazorpayCheckout } from '../utils/razorpay';
 
 const Checkout = () => {
   const { items, total, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [loading, setLoading] = useState(false);
+  const [paymentEnabled, setPaymentEnabled] = useState(false);
+
+  useEffect(() => {
+    paymentAPI
+      .getConfig()
+      .then((res) => setPaymentEnabled(res.data.data.enabled))
+      .catch(() => setPaymentEnabled(false));
+  }, []);
 
   if (items.length === 0) {
     navigate('/cart');
     return null;
   }
+
+  const orderItems = items.map(({ pizza, qty }) => ({
+    pizza: pizza._id,
+    qty,
+  }));
+
+  const placeCodOrder = async () => {
+    await orderAPI.place({
+      items: orderItems,
+      deliveryAddress: deliveryAddress.trim(),
+    });
+    clearCart();
+    toast.success('Order placed successfully!');
+    navigate('/orders');
+  };
+
+  const placeRazorpayOrder = async () => {
+    const scriptLoaded = await loadRazorpayScript();
+    if (!scriptLoaded) {
+      toast.error('Failed to load payment gateway');
+      return;
+    }
+
+    const paymentOrderRes = await paymentAPI.createOrder({ items: orderItems });
+    const { razorpayOrderId, amount, currency, keyId } = paymentOrderRes.data.data;
+
+    const paymentResponse = await openRazorpayCheckout({
+      keyId,
+      amount,
+      currency,
+      orderId: razorpayOrderId,
+      user,
+      onSuccess: (response) => response,
+    });
+
+    await paymentAPI.verify({
+      items: orderItems,
+      deliveryAddress: deliveryAddress.trim(),
+      razorpay_order_id: paymentResponse.razorpay_order_id,
+      razorpay_payment_id: paymentResponse.razorpay_payment_id,
+      razorpay_signature: paymentResponse.razorpay_signature,
+    });
+
+    clearCart();
+    toast.success('Payment successful! Order confirmed.');
+    navigate('/orders');
+  };
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
@@ -26,21 +84,15 @@ const Checkout = () => {
 
     setLoading(true);
     try {
-      const orderItems = items.map(({ pizza, qty }) => ({
-        pizza: pizza._id,
-        qty,
-      }));
-
-      await orderAPI.place({
-        items: orderItems,
-        deliveryAddress: deliveryAddress.trim(),
-      });
-
-      clearCart();
-      toast.success('Order placed successfully!');
-      navigate('/orders');
+      if (paymentEnabled) {
+        await placeRazorpayOrder();
+      } else {
+        await placeCodOrder();
+      }
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to place order');
+      if (err.message !== 'Payment cancelled') {
+        toast.error(err.response?.data?.message || err.message || 'Failed to place order');
+      }
     } finally {
       setLoading(false);
     }
@@ -66,8 +118,22 @@ const Checkout = () => {
             required
             aria-label="Delivery address"
           />
+
+          <div className="mb-4 rounded-lg bg-gray-50 border border-gray-200 p-4">
+            <p className="text-sm font-semibold text-neutral-dark mb-1">Payment</p>
+            <p className="text-sm text-gray-600">
+              {paymentEnabled
+                ? 'Pay securely with Razorpay (UPI, card, netbanking, wallet).'
+                : 'Cash on delivery — pay when your order arrives.'}
+            </p>
+          </div>
+
           <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">
-            {loading ? 'Placing Order...' : 'Place Order'}
+            {loading
+              ? 'Processing...'
+              : paymentEnabled
+                ? `Pay ${formatPrice(total)} with Razorpay`
+                : 'Place Order'}
           </button>
           <Link to="/cart" className="block text-center text-primary mt-3 hover:underline">
             ← Back to Cart

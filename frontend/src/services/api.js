@@ -55,3 +55,9 @@ export const orderAPI = {
   updateStatus: (id, status) => api.put(`/orders/${id}/status`, { status }),
   cancel: (id) => api.delete(`/orders/${id}`),
 };
+
+export const paymentAPI = {
+  getConfig: () => api.get('/payments/config'),
+  createOrder: (data) => api.post('/payments/create-order', data),
+  verify: (data) => api.post('/payments/verify', data),
+};

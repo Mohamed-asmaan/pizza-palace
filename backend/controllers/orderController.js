@@ -1,35 +1,12 @@
 const Order = require('../models/Order');
-const Pizza = require('../models/Pizza');
+const { validateAndBuildOrderItems } = require('../utils/orderItems');
 
 const VALID_STATUSES = ['Pending', 'Confirmed', 'Preparing', 'Out for Delivery', 'Delivered'];
 
 const placeOrder = async (req, res, next) => {
   try {
     const { items, deliveryAddress } = req.body;
-
-    if (!items || items.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'Order must contain at least one item',
-        statusCode: 400,
-      });
-    }
-
-    let totalAmount = 0;
-    const orderItems = [];
-
-    for (const item of items) {
-      const pizza = await Pizza.findById(item.pizza);
-      if (!pizza || !pizza.isAvailable) {
-        return res.status(400).json({
-          success: false,
-          message: `Pizza not available: ${item.pizza}`,
-          statusCode: 400,
-        });
-      }
-      orderItems.push({ pizza: pizza._id, qty: item.qty });
-      totalAmount += pizza.price * item.qty;
-    }
+    const { orderItems, totalAmount } = await validateAndBuildOrderItems(items);
 
     const order = await Order.create({
       customerId: req.user._id,
@@ -37,6 +14,8 @@ const placeOrder = async (req, res, next) => {
       totalAmount,
       deliveryAddress,
       status: 'Pending',
+      paymentStatus: 'unpaid',
+      paymentMethod: 'cod',
     });
 
     const populatedOrder = await Order.findById(order._id)
@@ -48,6 +27,13 @@ const placeOrder = async (req, res, next) => {
       data: populatedOrder,
     });
   } catch (error) {
+    if (error.statusCode) {
+      return res.status(error.statusCode).json({
+        success: false,
+        message: error.message,
+        statusCode: error.statusCode,
+      });
+    }
     next(error);
   }
 };

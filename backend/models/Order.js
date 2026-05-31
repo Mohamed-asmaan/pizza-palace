@@ -39,6 +39,22 @@ const orderSchema = new mongoose.Schema({
     enum: ['Pending', 'Confirmed', 'Preparing', 'Out for Delivery', 'Delivered'],
     default: 'Pending',
   },
+  paymentStatus: {
+    type: String,
+    enum: ['unpaid', 'paid', 'failed'],
+    default: 'unpaid',
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['razorpay', 'cod'],
+    default: 'cod',
+  },
+  razorpayOrderId: {
+    type: String,
+  },
+  razorpayPaymentId: {
+    type: String,
+  },
   deliveryAddress: {
     type: String,
     required: [true, 'Delivery address is required'],

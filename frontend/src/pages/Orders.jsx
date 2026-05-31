@@ -90,6 +90,14 @@ const Orders = () => {
             <div className="flex flex-wrap justify-between items-center gap-4 pt-4 border-t">
               <div>
                 <p className="text-sm text-gray-600">Delivery: {order.deliveryAddress}</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  Payment:{' '}
+                  {order.paymentStatus === 'paid'
+                    ? 'Paid via Razorpay'
+                    : order.paymentMethod === 'cod'
+                      ? 'Cash on delivery'
+                      : 'Unpaid'}
+                </p>
                 <p className="font-bold text-primary mt-1">{formatPrice(order.totalAmount)}</p>
               </div>
               {order.status === 'Pending' && (

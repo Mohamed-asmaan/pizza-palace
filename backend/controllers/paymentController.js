@@ -1,0 +1,165 @@
+const crypto = require('crypto');
+const Razorpay = require('razorpay');
+const Order = require('../models/Order');
+const { validateAndBuildOrderItems } = require('../utils/orderItems');
+
+const getRazorpayInstance = () => {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+
+  if (!keyId || !keySecret) {
+    return null;
+  }
+
+  return new Razorpay({ key_id: keyId, key_secret: keySecret });
+};
+
+const getPaymentConfig = (req, res) => {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+
+  res.status(200).json({
+    success: true,
+    data: {
+      enabled: Boolean(keyId && process.env.RAZORPAY_KEY_SECRET),
+      keyId: keyId || null,
+      currency: 'INR',
+    },
+  });
+};
+
+const createPaymentOrder = async (req, res, next) => {
+  try {
+    const razorpay = getRazorpayInstance();
+    if (!razorpay) {
+      return res.status(503).json({
+        success: false,
+        message: 'Payment gateway is not configured',
+        statusCode: 503,
+      });
+    }
+
+    const { orderItems, totalAmount } = await validateAndBuildOrderItems(req.body.items);
+    const amountInPaise = Math.round(totalAmount * 100);
+
+    if (amountInPaise < 100) {
+      return res.status(400).json({
+        success: false,
+        message: 'Minimum order amount is ₹1',
+        statusCode: 400,
+      });
+    }
+
+    const razorpayOrder = await razorpay.orders.create({
+      amount: amountInPaise,
+      currency: 'INR',
+      receipt: `order_${req.user._id}_${Date.now()}`,
+      notes: {
+        customerId: req.user._id.toString(),
+        itemCount: String(orderItems.length),
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      data: {
+        razorpayOrderId: razorpayOrder.id,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        keyId: process.env.RAZORPAY_KEY_ID,
+        totalAmount,
+      },
+    });
+  } catch (error) {
+    if (error.statusCode) {
+      return res.status(error.statusCode).json({
+        success: false,
+        message: error.message,
+        statusCode: error.statusCode,
+      });
+    }
+    next(error);
+  }
+};
+
+const verifyPayment = async (req, res, next) => {
+  try {
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    if (!keySecret) {
+      return res.status(503).json({
+        success: false,
+        message: 'Payment gateway is not configured',
+        statusCode: 503,
+      });
+    }
+
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      items,
+      deliveryAddress,
+    } = req.body;
+
+    const body = `${razorpay_order_id}|${razorpay_payment_id}`;
+    const expectedSignature = crypto
+      .createHmac('sha256', keySecret)
+      .update(body)
+      .digest('hex');
+
+    if (expectedSignature !== razorpay_signature) {
+      return res.status(400).json({
+        success: false,
+        message: 'Payment verification failed',
+        statusCode: 400,
+      });
+    }
+
+    const existingOrder = await Order.findOne({ razorpayOrderId: razorpay_order_id });
+    if (existingOrder) {
+      return res.status(200).json({
+        success: true,
+        data: await Order.findById(existingOrder._id)
+          .populate('customerId', 'name email')
+          .populate('items.pizza'),
+      });
+    }
+
+    const { orderItems, totalAmount } = await validateAndBuildOrderItems(items);
+
+    const order = await Order.create({
+      customerId: req.user._id,
+      items: orderItems,
+      totalAmount,
+      deliveryAddress,
+      status: 'Confirmed',
+      paymentStatus: 'paid',
+      paymentMethod: 'razorpay',
+      razorpayOrderId: razorpay_order_id,
+      razorpayPaymentId: razorpay_payment_id,
+    });
+
+    const populatedOrder = await Order.findById(order._id)
+      .populate('customerId', 'name email')
+      .populate('items.pizza');
+
+    res.status(201).json({
+      success: true,
+      data: populatedOrder,
+    });
+  } catch (error) {
+    if (error.statusCode) {
+      return res.status(error.statusCode).json({
+        success: false,
+        message: error.message,
+        statusCode: error.statusCode,
+      });
+    }
+    next(error);
+  }
+};
+
+module.exports = {
+  getPaymentConfig,
+  createPaymentOrder,
+  verifyPayment,
+};

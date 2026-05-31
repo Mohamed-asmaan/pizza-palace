@@ -69,6 +69,12 @@ Auth header: `Authorization: Bearer <token>`
 
 On first deploy, the server imports `backend/data/pizzas.json` into MongoDB when the menu is empty.
 
+**Razorpay** (payments):
+- `RAZORPAY_KEY_ID` — from Razorpay dashboard (test or live key)
+- `RAZORPAY_KEY_SECRET` — secret key (Render env only, never commit)
+
+When Razorpay keys are set, checkout uses online payment. Without keys, checkout falls back to cash on delivery.
+
 **Vercel** — API URL is configured in code (`frontend/.env.production` and `frontend/src/services/api.js`). No dashboard env vars required.
 
 **Vercel** live URL: https://pizza-palace-gules.vercel.app
