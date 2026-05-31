@@ -1,3 +1,4 @@
+// main entry - wraps app with router, auth, cart
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -13,13 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <AuthProvider>
         <CartProvider>
           <App />
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 3000,
-              style: { fontFamily: 'Inter, sans-serif' },
-            }}
-          />
+          <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>

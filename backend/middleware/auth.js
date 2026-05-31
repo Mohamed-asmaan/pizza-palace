@@ -1,3 +1,9 @@
+// ============================================
+// auth.js - CHECK IF USER IS LOGGED IN (middleware)
+// verifyToken = must send Bearer token in header
+// isAdmin = user role must be admin
+// ============================================
+
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 

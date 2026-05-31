@@ -1,3 +1,4 @@
+// Order model - customer orders in MongoDB
 const mongoose = require('mongoose');
 
 const orderItemSchema = new mongoose.Schema(

@@ -1,7 +1,13 @@
+// ============================================
+// authController.js - LOGIN, REGISTER, PROFILE
+// routes: /api/auth/register  /api/auth/login  etc
+// ============================================
+
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
 
+// make jwt token after login (valid 24 hours)
 const generateToken = (user) =>
   jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
     expiresIn: '24h',

@@ -1,29 +1,40 @@
+// ============================================
+// api.js - ALL FRONTEND API CALLS GO HERE
+// axios talks to backend (Render or localhost)
+// ============================================
+
 import axios from 'axios';
 
-const PRODUCTION_API_URL = 'https://pizza-palace-api-6udi.onrender.com/api';
-const LOCAL_API_URL = 'http://localhost:5000/api';
-
-const API_URL =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? PRODUCTION_API_URL : LOCAL_API_URL);
+// backend url - local when developing, render when live
+var backendUrl = 'http://localhost:5000/api';
+if (import.meta.env.PROD) {
+  backendUrl = 'https://pizza-palace-api-6udi.onrender.com/api';
+}
+if (import.meta.env.VITE_API_URL) {
+  backendUrl = import.meta.env.VITE_API_URL;
+}
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: backendUrl,
   headers: { 'Content-Type': 'application/json' },
 });
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+// attach login token to every request if user is logged in
+api.interceptors.request.use(function (config) {
+  var token = localStorage.getItem('token');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = 'Bearer ' + token;
   }
   return config;
 });
 
+// if token expired, clear login from browser
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (error.response && error.response.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
     }
@@ -33,31 +44,69 @@ api.interceptors.response.use(
 
 export default api;
 
+// ----- AUTH (login register) -----
 export const authAPI = {
-  register: (data) => api.post('/auth/register', data),
-  login: (data) => api.post('/auth/login', data),
-  getProfile: () => api.get('/auth/profile'),
-  updateProfile: (data) => api.put('/auth/profile', data),
+  register: function (data) {
+    return api.post('/auth/register', data);
+  },
+  login: function (data) {
+    return api.post('/auth/login', data);
+  },
+  getProfile: function () {
+    return api.get('/auth/profile');
+  },
+  updateProfile: function (data) {
+    return api.put('/auth/profile', data);
+  },
 };
 
+// ----- PIZZAS (menu) -----
 export const pizzaAPI = {
-  getAll: (params) => api.get('/pizzas', { params }),
-  getById: (id) => api.get(`/pizzas/${id}`),
-  create: (data) => api.post('/pizzas', data),
-  update: (id, data) => api.put(`/pizzas/${id}`, data),
-  delete: (id) => api.delete(`/pizzas/${id}`),
+  getAll: function (params) {
+    return api.get('/pizzas', { params: params });
+  },
+  getById: function (id) {
+    return api.get('/pizzas/' + id);
+  },
+  create: function (data) {
+    return api.post('/pizzas', data);
+  },
+  update: function (id, data) {
+    return api.put('/pizzas/' + id, data);
+  },
+  delete: function (id) {
+    return api.delete('/pizzas/' + id);
+  },
 };
 
+// ----- ORDERS -----
 export const orderAPI = {
-  place: (data) => api.post('/orders', data),
-  getMyOrders: () => api.get('/orders/my'),
-  getAllOrders: () => api.get('/orders'),
-  updateStatus: (id, status) => api.put(`/orders/${id}/status`, { status }),
-  cancel: (id) => api.delete(`/orders/${id}`),
+  place: function (data) {
+    return api.post('/orders', data);
+  },
+  getMyOrders: function () {
+    return api.get('/orders/my');
+  },
+  getAllOrders: function () {
+    return api.get('/orders');
+  },
+  updateStatus: function (id, status) {
+    return api.put('/orders/' + id + '/status', { status: status });
+  },
+  cancel: function (id) {
+    return api.delete('/orders/' + id);
+  },
 };
 
+// ----- RAZORPAY PAYMENT (test mode) -----
 export const paymentAPI = {
-  getConfig: () => api.get('/payments/config'),
-  createOrder: (data) => api.post('/payments/create-order', data),
-  verify: (data) => api.post('/payments/verify', data),
+  getConfig: function () {
+    return api.get('/payments/config');
+  },
+  createOrder: function (data) {
+    return api.post('/payments/create-order', data);
+  },
+  verify: function (data) {
+    return api.post('/payments/verify', data);
+  },
 };

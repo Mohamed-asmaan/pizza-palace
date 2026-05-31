@@ -1,8 +1,12 @@
+// ============================================
+// App.jsx - ALL PAGE ROUTES (which url shows which page)
+// ============================================
+
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import ProtectedRoute from './components/ProtectedRoute';
-import AdminRoute from './components/AdminRoute';
+import ProtectedRoute from './components/ProtectedRoute'; // must be logged in
+import AdminRoute from './components/AdminRoute';         // must be admin
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import PizzaDetail from './pages/PizzaDetail';
@@ -20,58 +24,21 @@ function App() {
       <Navbar />
       <main className="flex-1">
         <Routes>
+          {/* public pages - anyone can see */}
           <Route path="/" element={<Home />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/pizza/:id" element={<PizzaDetail />} />
-          <Route
-            path="/cart"
-            element={
-              <ProtectedRoute>
-                <Cart />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/checkout"
-            element={
-              <ProtectedRoute>
-                <Checkout />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/orders"
-            element={
-              <ProtectedRoute>
-                <Orders />
-              </ProtectedRoute>
-            }
-          />
           <Route path="/auth" element={<Auth />} />
-          <Route
-            path="/admin"
-            element={
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/admin/pizzas"
-            element={
-              <AdminRoute>
-                <AdminPizzas />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/admin/orders"
-            element={
-              <AdminRoute>
-                <AdminOrders />
-              </AdminRoute>
-            }
-          />
+
+          {/* login required */}
+          <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+          <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+          <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+
+          {/* admin only */}
+          <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/admin/pizzas" element={<AdminRoute><AdminPizzas /></AdminRoute>} />
+          <Route path="/admin/orders" element={<AdminRoute><AdminOrders /></AdminRoute>} />
         </Routes>
       </main>
       <Footer />

@@ -1,3 +1,5 @@
+// User model - stored in MongoDB users collection
+// password gets hashed automatically before save
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 

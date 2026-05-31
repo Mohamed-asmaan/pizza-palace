@@ -1,3 +1,4 @@
+// Menu page - fetches pizzas from backend GET /api/pizzas
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { pizzaAPI } from '../services/api';

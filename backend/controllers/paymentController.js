@@ -1,3 +1,9 @@
+// ============================================
+// paymentController.js - RAZORPAY TEST PAYMENT
+// create-order = start payment
+// verify = check payment ok then save order
+// ============================================
+
 const crypto = require('crypto');
 const Razorpay = require('razorpay');
 const Order = require('../models/Order');

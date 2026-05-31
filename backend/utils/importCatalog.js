@@ -1,3 +1,8 @@
+// ============================================
+// importCatalog.js - LOAD PIZZAS FROM data/pizzas.json INTO MONGODB
+// runs when server starts if menu is empty
+// ============================================
+
 const fs = require('fs');
 const path = require('path');
 const User = require('../models/User');

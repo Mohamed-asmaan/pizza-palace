@@ -1,3 +1,6 @@
+// ============================================
+// orderController.js - PLACE ORDER, VIEW ORDERS, CANCEL
+// ============================================
 const Order = require('../models/Order');
 const { validateAndBuildOrderItems } = require('../utils/orderItems');
 

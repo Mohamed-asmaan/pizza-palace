@@ -1,3 +1,6 @@
+// ============================================
+// pizzaController.js - GET/ADD/EDIT/DELETE PIZZAS (menu)
+// ============================================
 const Pizza = require('../models/Pizza');
 
 const getAllPizzas = async (req, res, next) => {

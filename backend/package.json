@@ -1,7 +1,7 @@
 {
   "name": "pizza-palace-backend",
   "version": "1.0.0",
-  "description": "Pizza Palace REST API — MERN Stack Online Food Ordering Platform",
+  "description": "Pizza Palace backend API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
