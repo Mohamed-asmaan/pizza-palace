@@ -1,82 +1,20 @@
-// ============================================
-// AuthContext.jsx - KEEPS LOGGED IN USER INFO
-// saves token in localStorage so refresh still logged in
-// useAuth() hook used in Navbar, Checkout, etc
-// ============================================
+import { useDispatch, useSelector } from 'react-redux';
+import { setAuth, logoutUser, updateAuthUser } from '../store/authSlice';
 
-import { createContext, useContext, useState, useEffect } from 'react';
-import { authAPI } from '../services/api';
+export const AuthProvider = ({ children }) => children;
 
-const AuthContext = createContext(null);
+export const useAuth = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const loading = useSelector((state) => state.auth.loading);
 
-export const AuthProvider = ({ children }) => {
-  // load user from browser storage on page load
-  const [user, setUser] = useState(function () {
-    var stored = localStorage.getItem('user');
-    if (stored) {
-      return JSON.parse(stored);
-    }
-    return null;
-  });
-  const [loading, setLoading] = useState(true);
-
-  // if token exists, get fresh user data from backend
-  useEffect(function () {
-    var token = localStorage.getItem('token');
-    if (token) {
-      authAPI
-        .getProfile()
-        .then(function (res) {
-          setUser(res.data.data);
-          localStorage.setItem('user', JSON.stringify(res.data.data));
-        })
-        .catch(function () {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          setUser(null);
-        })
-        .finally(function () {
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
-  // called after login or register
-  const login = function (token, userData) {
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(userData));
-    setUser(userData);
+  return {
+    user,
+    loading,
+    isAdmin: Boolean(user && user.role === 'admin'),
+    isAuthenticated: Boolean(user),
+    login: (token, userData) => dispatch(setAuth({ token, user: userData })),
+    logout: () => dispatch(logoutUser()),
+    updateUser: (userData) => dispatch(updateAuthUser(userData)),
   };
-
-  const logout = function () {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-  };
-
-  const updateUser = function (userData) {
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-  };
-
-  var isAdmin = user && user.role === 'admin';
-  var isAuthenticated = user !== null;
-
-  return (
-    <AuthContext.Provider
-      value={{ user: user, loading: loading, login: login, logout: logout, updateUser: updateUser, isAdmin: isAdmin, isAuthenticated: isAuthenticated }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = function () {
-  var context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used inside AuthProvider');
-  }
-  return context;
 };

@@ -2,11 +2,14 @@
 // App.jsx - ALL PAGE ROUTES (which url shows which page)
 // ============================================
 
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute'; // must be logged in
 import AdminRoute from './components/AdminRoute';         // must be admin
+import { initializeAuth } from './store/authSlice';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import PizzaDetail from './pages/PizzaDetail';
@@ -19,6 +22,12 @@ import AdminPizzas from './pages/AdminPizzas';
 import AdminOrders from './pages/AdminOrders';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initializeAuth());
+  }, [dispatch]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
