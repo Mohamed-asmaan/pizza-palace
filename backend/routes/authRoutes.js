@@ -1,3 +1,12 @@
+// ============================================
+// authRoutes.js - LOGIN & REGISTER
+// Base URL: /api/auth
+// POST /register  - new customer account
+// POST /login     - returns JWT token
+// GET  /profile   - current user (needs token)
+// PUT  /profile   - update name/email/password
+// ============================================
+
 const express = require('express');
 const { body } = require('express-validator');
 const {

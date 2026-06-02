@@ -1,3 +1,8 @@
+// ============================================
+// Auth.jsx - LOGIN & REGISTER PAGE
+// Tabs switch between login and sign up forms
+// ============================================
+
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -12,6 +17,7 @@ const Auth = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  // ProtectedRoute saves where user wanted to go before login (e.g. /cart)
   const from = location.state?.from?.pathname || '/';
 
   const handleChange = (e) => {
@@ -35,8 +41,9 @@ const Auth = () => {
       }
 
       const { token, user } = res.data.data;
-      login(token, user);
+      login(token, user); // saves token in localStorage via Redux
       toast.success(tab === 'login' ? 'Welcome back!' : 'Account created successfully!');
+      // admins go to dashboard; customers return to page they tried to open
       navigate(user.role === 'admin' ? '/admin' : from);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Authentication failed');

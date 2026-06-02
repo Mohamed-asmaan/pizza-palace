@@ -1,3 +1,5 @@
+// StatusBadge.jsx - colored pill showing order status (Pending, Delivered, etc.)
+
 import { getStatusColor } from '../utils/format';
 
 const StatusBadge = ({ status }) => (

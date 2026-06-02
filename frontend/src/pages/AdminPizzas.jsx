@@ -1,3 +1,8 @@
+// ============================================
+// AdminPizzas.jsx - ADMIN MENU MANAGER (/admin/pizzas)
+// Create, edit, delete pizzas; toggle isAvailable to hide from customers
+// ============================================
+
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,12 +40,14 @@ const AdminPizzas = () => {
     fetchPizzas();
   }, []);
 
+  // modal form for new pizza
   const openCreate = () => {
     setEditingId(null);
     setForm(emptyForm);
     setShowModal(true);
   };
 
+  // same modal, pre-filled for editing
   const openEdit = (pizza) => {
     setEditingId(pizza._id);
     setForm({
@@ -84,6 +91,7 @@ const AdminPizzas = () => {
     }
   };
 
+  // quick hide/show on menu without deleting the pizza record
   const toggleAvailability = async (pizza) => {
     try {
       await pizzaAPI.update(pizza._id, { isAvailable: !pizza.isAvailable });

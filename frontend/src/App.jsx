@@ -24,6 +24,7 @@ import AdminOrders from './pages/AdminOrders';
 function App() {
   const dispatch = useDispatch();
 
+  // on first load: check if saved token is still valid
   useEffect(() => {
     dispatch(initializeAuth());
   }, [dispatch]);

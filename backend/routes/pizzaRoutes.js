@@ -1,3 +1,13 @@
+// ============================================
+// pizzaRoutes.js - MENU (PIZZAS)
+// Base URL: /api/pizzas
+// GET    /       - list pizzas (customers see only available ones)
+// GET    /:id    - single pizza
+// POST   /       - add pizza (admin only)
+// PUT    /:id    - edit pizza (admin only)
+// DELETE /:id    - delete pizza (admin only)
+// ============================================
+
 const express = require('express');
 const { body } = require('express-validator');
 const {
@@ -12,6 +22,7 @@ const { handleValidationErrors } = require('../controllers/authController');
 
 const router = express.Router();
 
+// if user sent a token, attach user to req; if not, still allow public menu view
 const optionalAuth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {

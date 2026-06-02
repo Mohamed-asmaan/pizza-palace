@@ -1,3 +1,8 @@
+// ============================================
+// PizzaCard.jsx - ONE PIZZA TILE (Home + Menu)
+// Clicking the card goes to PizzaDetail page for that id
+// ============================================
+
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { formatPrice } from '../utils/format';

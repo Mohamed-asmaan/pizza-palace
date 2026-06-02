@@ -1,3 +1,5 @@
+// SkeletonLoader.jsx - grey placeholder while data is loading from API
+
 const SkeletonLoader = ({ count = 4, type = 'card' }) => {
   if (type === 'table') {
     return (

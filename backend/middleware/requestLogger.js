@@ -1,3 +1,4 @@
+// Prints each HTTP request in the terminal (helpful when debugging)
 const morgan = require('morgan');
 
 const requestLogger = () => {

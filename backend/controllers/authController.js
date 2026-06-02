@@ -26,6 +26,7 @@ const handleValidationErrors = (req, res, next) => {
   next();
 };
 
+// POST /api/auth/register — new customer account + auto login token
 const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -59,10 +60,12 @@ const register = async (req, res, next) => {
   }
 };
 
+// POST /api/auth/login — checks password, returns JWT for frontend to store
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    // select('+password') needed because password is hidden by default in schema
     const user = await User.findOne({ email }).select('+password');
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({
@@ -91,6 +94,7 @@ const login = async (req, res, next) => {
   }
 };
 
+// GET /api/auth/profile — used on app load to confirm token still valid
 const getProfile = async (req, res, next) => {
   try {
     res.status(200).json({
@@ -108,6 +112,7 @@ const getProfile = async (req, res, next) => {
   }
 };
 
+// PUT /api/auth/profile — user can change name, email, or password
 const updateProfile = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;

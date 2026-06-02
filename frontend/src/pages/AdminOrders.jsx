@@ -1,3 +1,8 @@
+// ============================================
+// AdminOrders.jsx - ADMIN ORDER TABLE (/admin/orders)
+// Change status dropdown = kitchen/delivery workflow for each order
+// ============================================
+
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -24,6 +29,7 @@ const AdminOrders = () => {
     fetchOrders();
   }, []);
 
+  // PUT /api/orders/:id/status
   const handleStatusUpdate = async (orderId, status) => {
     try {
       await orderAPI.updateStatus(orderId, status);

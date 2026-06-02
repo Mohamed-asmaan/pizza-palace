@@ -1,13 +1,16 @@
 // ============================================
-// pizzaController.js - GET/ADD/EDIT/DELETE PIZZAS (menu)
+// pizzaController.js - MENU LOGIC (called from pizzaRoutes.js)
+// Customers only see available pizzas; admin sees everything.
 // ============================================
 const Pizza = require('../models/Pizza');
 
+// GET /api/pizzas — list menu (optional ?category=Veg)
 const getAllPizzas = async (req, res, next) => {
   try {
     const filter = {};
     const isAdmin = req.user && req.user.role === 'admin';
 
+    // hide unavailable items from normal shoppers
     if (!isAdmin) {
       filter.isAvailable = true;
     }
@@ -27,6 +30,7 @@ const getAllPizzas = async (req, res, next) => {
   }
 };
 
+// GET /api/pizzas/:id — single pizza detail page
 const getPizzaById = async (req, res, next) => {
   try {
     const pizza = await Pizza.findById(req.params.id);
@@ -50,6 +54,7 @@ const getPizzaById = async (req, res, next) => {
   }
 };
 
+// POST /api/pizzas — admin adds new menu item
 const createPizza = async (req, res, next) => {
   try {
     const pizza = await Pizza.create(req.body);
@@ -63,6 +68,7 @@ const createPizza = async (req, res, next) => {
   }
 };
 
+// PUT /api/pizzas/:id — admin edits name, price, availability, etc.
 const updatePizza = async (req, res, next) => {
   try {
     const pizza = await Pizza.findByIdAndUpdate(req.params.id, req.body, {
@@ -87,6 +93,7 @@ const updatePizza = async (req, res, next) => {
   }
 };
 
+// DELETE /api/pizzas/:id — admin removes pizza from database
 const deletePizza = async (req, res, next) => {
   try {
     const pizza = await Pizza.findByIdAndDelete(req.params.id);

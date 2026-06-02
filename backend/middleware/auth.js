@@ -19,7 +19,7 @@ const verifyToken = async (req, res, next) => {
       });
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.split(' ')[1]; // format: "Bearer <token>"
 
     let decoded;
     try {

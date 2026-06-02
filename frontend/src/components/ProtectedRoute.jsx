@@ -1,3 +1,9 @@
+// ============================================
+// ProtectedRoute.jsx - LOGIN REQUIRED PAGES
+// Used for cart, checkout, orders in App.jsx
+// Sends user to /auth if not logged in (remembers where they came from)
+// ============================================
+
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import SkeletonLoader from './SkeletonLoader';

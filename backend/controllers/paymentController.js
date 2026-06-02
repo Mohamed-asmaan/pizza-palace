@@ -9,6 +9,7 @@ const Razorpay = require('razorpay');
 const Order = require('../models/Order');
 const { validateAndBuildOrderItems } = require('../utils/orderItems');
 
+// only create Razorpay client when test keys are in .env (project uses test mode only)
 const getRazorpayInstance = () => {
   const keyId = process.env.RAZORPAY_KEY_ID;
   const keySecret = process.env.RAZORPAY_KEY_SECRET;
@@ -31,6 +32,7 @@ const isTestMode = () => {
   return Boolean(keyId && process.env.RAZORPAY_KEY_SECRET && keyId.startsWith('rzp_test_'));
 };
 
+// GET /api/payments/config — frontend uses this to show Razorpay vs COD
 const getPaymentConfig = (req, res) => {
   const keyId = process.env.RAZORPAY_KEY_ID;
   const enabled = isTestMode();
@@ -46,6 +48,7 @@ const getPaymentConfig = (req, res) => {
   });
 };
 
+// POST /api/payments/create-order — step 1: create Razorpay order before popup opens
 const createPaymentOrder = async (req, res, next) => {
   try {
     let razorpay;
@@ -121,6 +124,7 @@ const createPaymentOrder = async (req, res, next) => {
   }
 };
 
+// POST /api/payments/verify — step 2: confirm payment signature, then save order as paid
 const verifyPayment = async (req, res, next) => {
   try {
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
@@ -140,6 +144,7 @@ const verifyPayment = async (req, res, next) => {
       deliveryAddress,
     } = req.body;
 
+    // Razorpay sends a signature - we recreate it to prove payment is real
     const body = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSignature = crypto
       .createHmac('sha256', keySecret)
@@ -154,6 +159,7 @@ const verifyPayment = async (req, res, next) => {
       });
     }
 
+    // if user refreshes after pay, don't create duplicate order for same Razorpay id
     const existingOrder = await Order.findOne({ razorpayOrderId: razorpay_order_id });
     if (existingOrder) {
       return res.status(200).json({

@@ -1,3 +1,8 @@
+// ============================================
+// Cart.jsx - SHOPPING CART PAGE
+// Change quantity, remove items, go to checkout
+// ============================================
+
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';

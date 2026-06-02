@@ -1,3 +1,8 @@
+// ============================================
+// AdminDashboard.jsx - ADMIN HOME (/admin)
+// Loads all orders and shows summary cards + links to manage pizzas/orders
+// ============================================
+
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -17,6 +22,7 @@ const AdminDashboard = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  // only count delivered orders as revenue (not pending/cancelled)
   const totalRevenue = orders
     .filter((o) => o.status === 'Delivered')
     .reduce((sum, o) => sum + o.totalAmount, 0);

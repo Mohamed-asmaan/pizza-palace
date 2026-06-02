@@ -1,4 +1,8 @@
-// Order model - customer orders in MongoDB
+// ============================================
+// Order.js - CUSTOMER ORDER
+// items[] = list of { pizza id, qty }
+// paymentMethod: 'cod' or 'razorpay' | paymentStatus: unpaid/paid/failed
+// ============================================
 const mongoose = require('mongoose');
 
 const orderItemSchema = new mongoose.Schema(

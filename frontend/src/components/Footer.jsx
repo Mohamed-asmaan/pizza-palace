@@ -1,4 +1,6 @@
-// footer shown at bottom of every page
+// ============================================
+// Footer.jsx - simple footer at bottom of every page (App.jsx)
+// ============================================
 const Footer = () => (
   <footer className="bg-neutral-dark text-white mt-auto">
     <div className="container mx-auto px-4 py-8">

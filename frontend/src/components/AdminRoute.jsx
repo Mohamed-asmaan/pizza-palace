@@ -1,3 +1,8 @@
+// ============================================
+// AdminRoute.jsx - BLOCKS NON-ADMIN USERS
+// Wrap admin pages in App.jsx: <AdminRoute><AdminDashboard /></AdminRoute>
+// ============================================
+
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import SkeletonLoader from './SkeletonLoader';

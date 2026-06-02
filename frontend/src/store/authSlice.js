@@ -1,6 +1,13 @@
+// ============================================
+// authSlice.js - LOGIN STATE (Redux)
+// Saves token + user in localStorage so refresh keeps you logged in
+// initializeAuth runs on app load (see App.jsx)
+// ============================================
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { authAPI } from '../services/api';
 
+// read user from browser storage on first load
 const getStoredUser = () => {
   const raw = localStorage.getItem('user');
   if (!raw) return null;
@@ -11,6 +18,7 @@ const getStoredUser = () => {
   }
 };
 
+// called once when app opens - validates token with backend
 export const initializeAuth = createAsyncThunk('auth/initialize', async (_, { rejectWithValue }) => {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -29,9 +37,10 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: getStoredUser(),
-    loading: true,
+    loading: true, // true until initializeAuth finishes
   },
   reducers: {
+    // after login or register
     setAuth: (state, action) => {
       const { token, user } = action.payload;
       localStorage.setItem('token', token);
@@ -63,6 +72,7 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(initializeAuth.rejected, (state) => {
+        // bad or expired token - clear storage
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         state.user = null;

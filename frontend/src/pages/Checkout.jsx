@@ -1,4 +1,8 @@
-// Checkout page - address + razorpay test payment or cash on delivery
+// ============================================
+// Checkout.jsx - PLACE ORDER PAGE
+// If Razorpay test keys exist on server → online test payment
+// Otherwise → cash on delivery (COD) order only
+// ============================================
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -18,6 +22,7 @@ const Checkout = () => {
   const [paymentEnabled, setPaymentEnabled] = useState(false);
   const [testMode, setTestMode] = useState(false);
 
+  // ask backend if Razorpay test keys are set up
   useEffect(() => {
     paymentAPI
       .getConfig()
@@ -31,16 +36,19 @@ const Checkout = () => {
       });
   }, []);
 
+  // empty cart should not reach checkout
   if (items.length === 0) {
     navigate('/cart');
     return null;
   }
 
+  // backend expects { pizza: mongoId, qty } not full pizza object
   const orderItems = items.map(({ pizza, qty }) => ({
     pizza: pizza._id,
     qty,
   }));
 
+  // cash on delivery - no Razorpay
   const placeCodOrder = async () => {
     await orderAPI.place({
       items: orderItems,
@@ -51,6 +59,7 @@ const Checkout = () => {
     navigate('/orders');
   };
 
+  // online test payment: create order -> popup -> verify on backend
   const placeRazorpayOrder = async () => {
     const scriptLoaded = await loadRazorpayScript();
     if (!scriptLoaded) {
@@ -83,6 +92,7 @@ const Checkout = () => {
     navigate('/orders');
   };
 
+  // form submit: pick payment path based on server config
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (!deliveryAddress.trim()) {

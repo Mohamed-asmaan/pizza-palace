@@ -1,3 +1,9 @@
+// ============================================
+// Navbar.jsx - TOP NAVIGATION (shown on every page via App.jsx)
+// Shows different links for guest vs customer vs admin
+// Cart icon only appears when logged in (cart needs account)
+// ============================================
+
 import { Link, NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -7,6 +13,7 @@ const Navbar = () => {
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const { itemCount } = useCart();
 
+  // highlight the link for the current page
   const navLinkClass = ({ isActive }) =>
     `px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
       isActive ? 'bg-primary text-white' : 'text-neutral-dark hover:bg-gray-100'

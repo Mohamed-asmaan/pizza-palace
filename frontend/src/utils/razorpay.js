@@ -1,4 +1,9 @@
-// opens razorpay payment popup (test mode)
+// ============================================
+// razorpay.js - RAZORPAY CHECKOUT POPUP (test mode)
+// loadRazorpayScript = add Razorpay JS to page
+// openRazorpayCheckout = show payment window
+// ============================================
+
 const RAZORPAY_SCRIPT = 'https://checkout.razorpay.com/v1/checkout.js';
 
 export const loadRazorpayScript = () =>

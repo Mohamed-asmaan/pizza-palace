@@ -1,3 +1,8 @@
+// ============================================
+// CartContext.jsx - EASY HOOK FOR SHOPPING CART
+// Components call useCart() to add items, change qty, get total
+// ============================================
+
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, updateItemQty, removeItem, clearAllItems } from '../store/cartSlice';
 

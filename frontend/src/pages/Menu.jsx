@@ -1,4 +1,7 @@
-// Menu page - fetches pizzas from backend GET /api/pizzas
+// ============================================
+// Menu.jsx - FULL MENU PAGE
+// Category buttons call API with filter; search filters results on the client
+// ============================================
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { pizzaAPI } from '../services/api';
@@ -13,6 +16,7 @@ const Menu = () => {
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
 
+  // reload pizzas when user picks a category tab
   useEffect(() => {
     setLoading(true);
     const params = category !== 'All' ? { category } : {};
@@ -23,6 +27,7 @@ const Menu = () => {
       .finally(() => setLoading(false));
   }, [category]);
 
+  // search box runs locally so we don't need extra API calls while typing
   const filteredPizzas = useMemo(() => {
     if (!search.trim()) return pizzas;
     const query = search.toLowerCase();

@@ -1,3 +1,8 @@
+// ============================================
+// cartSlice.js - SHOPPING CART STATE (Redux)
+// Cart is saved in localStorage so it survives page refresh
+// ============================================
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const CART_KEY = 'pizza_palace_cart';
@@ -19,9 +24,10 @@ const saveCart = (items) => {
 const cartSlice = createSlice({
   name: 'cart',
   initialState: {
-    items: getStoredCart(),
+    items: getStoredCart(), // each item: { pizza, qty }
   },
   reducers: {
+    // same pizza again = increase quantity instead of duplicate row
     addItem: (state, action) => {
       const { pizza, qty = 1 } = action.payload;
       const existing = state.items.find((it) => it.pizza._id === pizza._id);

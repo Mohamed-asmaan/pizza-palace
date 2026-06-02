@@ -4,8 +4,10 @@
 const Order = require('../models/Order');
 const { validateAndBuildOrderItems } = require('../utils/orderItems');
 
+// allowed values admin can pick in dropdown
 const VALID_STATUSES = ['Pending', 'Confirmed', 'Preparing', 'Out for Delivery', 'Delivered'];
 
+// POST /api/orders — cash on delivery checkout (payment stays unpaid until delivered)
 const placeOrder = async (req, res, next) => {
   try {
     const { items, deliveryAddress } = req.body;
@@ -41,6 +43,7 @@ const placeOrder = async (req, res, next) => {
   }
 };
 
+// GET /api/orders/my — logged-in customer order history
 const getMyOrders = async (req, res, next) => {
   try {
     const orders = await Order.find({ customerId: req.user._id })
@@ -57,6 +60,7 @@ const getMyOrders = async (req, res, next) => {
   }
 };
 
+// GET /api/orders — admin sees every customer's orders
 const getAllOrders = async (req, res, next) => {
   try {
     const orders = await Order.find()
@@ -74,6 +78,7 @@ const getAllOrders = async (req, res, next) => {
   }
 };
 
+// PUT /api/orders/:id/status — admin moves order through kitchen/delivery steps
 const updateOrderStatus = async (req, res, next) => {
   try {
     const { status } = req.body;
@@ -111,6 +116,7 @@ const updateOrderStatus = async (req, res, next) => {
   }
 };
 
+// DELETE /api/orders/:id — customer cancels own pending order (or admin)
 const cancelOrder = async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -134,6 +140,7 @@ const cancelOrder = async (req, res, next) => {
       });
     }
 
+    // once kitchen started, we don't allow cancel (business rule)
     if (order.status !== 'Pending') {
       return res.status(400).json({
         success: false,

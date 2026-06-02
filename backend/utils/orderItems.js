@@ -1,3 +1,9 @@
+// ============================================
+// orderItems.js - CHECK CART ITEMS BEFORE ORDER
+// Loads each pizza from DB, checks it exists and is available,
+// then returns line items + total price for payment/order
+// ============================================
+
 const Pizza = require('../models/Pizza');
 
 const validateAndBuildOrderItems = async (items) => {

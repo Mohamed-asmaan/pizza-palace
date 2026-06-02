@@ -1,3 +1,11 @@
+// ============================================
+// paymentRoutes.js - RAZORPAY PAYMENT API
+// Base URL: /api/payments
+// GET  /config        - tells frontend if Razorpay test mode is on
+// POST /create-order  - creates Razorpay order (login required)
+// POST /verify        - checks payment signature and saves order
+// ============================================
+
 const express = require('express');
 const { body } = require('express-validator');
 const {
@@ -10,6 +18,7 @@ const { handleValidationErrors } = require('../controllers/authController');
 
 const router = express.Router();
 
+// same cart item rules used for create-order and verify
 const orderItemsValidation = [
   body('items').isArray({ min: 1 }).withMessage('Order must contain at least one item'),
   body('items.*.pizza').notEmpty().withMessage('Pizza ID is required'),
@@ -21,8 +30,10 @@ const orderItemsValidation = [
     .withMessage('Quantity must be at least 1'),
 ];
 
+// public - frontend checks if online payment is available
 router.get('/config', getPaymentConfig);
 
+// step 1: logged-in user starts payment (returns razorpay order id)
 router.post(
   '/create-order',
   verifyToken,
@@ -31,6 +42,7 @@ router.post(
   createPaymentOrder
 );
 
+// step 2: after Razorpay popup, frontend sends payment ids here to confirm
 router.post(
   '/verify',
   verifyToken,

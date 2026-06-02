@@ -1,3 +1,8 @@
+// ============================================
+// Orders.jsx - MY ORDERS (logged-in customer)
+// Lists past orders; "Cancel" only works while status is still Pending
+// ============================================
+
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -24,6 +29,7 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
+  // DELETE /api/orders/:id — backend checks status and ownership
   const handleCancel = async (orderId) => {
     try {
       await orderAPI.cancel(orderId);

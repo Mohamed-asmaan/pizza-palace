@@ -1,3 +1,8 @@
+// ============================================
+// Home.jsx - LANDING PAGE
+// Shows hero banner + 4 featured pizzas from API
+// ============================================
+
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -9,6 +14,7 @@ const Home = () => {
   const [pizzas, setPizzas] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // home page only shows 4 featured pizzas, not the full menu
   useEffect(() => {
     pizzaAPI
       .getAll()

@@ -1,5 +1,8 @@
-// User model - stored in MongoDB users collection
-// password gets hashed automatically before save
+// ============================================
+// User.js - CUSTOMER & ADMIN ACCOUNTS (MongoDB)
+// role: 'customer' (default) or 'admin'
+// password is hashed in pre('save') — never stored as plain text
+// ============================================
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 

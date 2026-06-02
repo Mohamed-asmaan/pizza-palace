@@ -1,3 +1,8 @@
+// ============================================
+// format.js - HELPER FUNCTIONS FOR UI
+// Prices in ₹, dates, order status colors, menu categories
+// ============================================
+
 export const formatPrice = (price) =>
   new Intl.NumberFormat('en-IN', {
     style: 'currency',

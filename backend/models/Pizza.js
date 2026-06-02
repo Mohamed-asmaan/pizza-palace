@@ -1,4 +1,7 @@
-// Pizza model - menu items in MongoDB
+// ============================================
+// Pizza.js - MENU ITEM (one document = one pizza on the menu)
+// isAvailable: false hides it from customers but admin can still see it
+// ============================================
 const mongoose = require('mongoose');
 
 const pizzaSchema = new mongoose.Schema({

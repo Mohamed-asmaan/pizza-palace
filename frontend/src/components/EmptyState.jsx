@@ -1,3 +1,5 @@
+// EmptyState.jsx - friendly message when list is empty (cart, menu, orders)
+
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 

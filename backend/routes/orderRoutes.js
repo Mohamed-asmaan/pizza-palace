@@ -1,3 +1,13 @@
+// ============================================
+// orderRoutes.js - ORDERS
+// Base URL: /api/orders
+// POST   /           - place order (COD, login required)
+// GET    /my         - logged-in user's orders
+// GET    /           - all orders (admin only)
+// PUT    /:id/status - update status (admin only)
+// DELETE /:id        - cancel own order
+// ============================================
+
 const express = require('express');
 const { body } = require('express-validator');
 const {

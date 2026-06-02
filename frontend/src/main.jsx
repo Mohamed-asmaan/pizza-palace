@@ -1,4 +1,9 @@
-// main entry - wraps app with router, auth, cart
+// ============================================
+// main.jsx - FRONTEND ENTRY POINT
+// Mounts React app into index.html #root
+// Wraps app with: Redux, Router, Auth, Cart, toast messages
+// ============================================
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
