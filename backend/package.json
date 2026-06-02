@@ -7,9 +7,7 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "seed": "node seed.js",
-    "import-catalog": "node scripts/importCatalog.js",
-    "test": "jest --coverage --forceExit --runInBand",
-    "test:watch": "jest --watch"
+    "import-catalog": "node scripts/importCatalog.js"
   },
   "keywords": [
     "pizza",
@@ -32,21 +30,6 @@
     "razorpay": "^2.9.6"
   },
   "devDependencies": {
-    "jest": "^30.0.0",
-    "mongodb-memory-server": "^10.1.4",
-    "nodemon": "^3.1.10",
-    "supertest": "^7.1.1"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "coverageDirectory": "coverage",
-    "collectCoverageFrom": [
-      "controllers/**/*.js",
-      "middleware/**/*.js",
-      "models/**/*.js"
-    ],
-    "testMatch": [
-      "**/tests/**/*.test.js"
-    ]
+    "nodemon": "^3.1.10"
   }
 }
