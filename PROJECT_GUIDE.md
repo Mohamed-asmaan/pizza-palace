@@ -20,6 +20,13 @@ Master index + 2-hour reading plan + locator for all 47 source files.
 
 **Each doc file includes a `## Code — source snippets & what they do` section at the end** (real code + short explanations; existing text kept).
 
+## Folder structure (source trees)
+
+| App | Doc |
+|-----|-----|
+| Frontend | [frontend/STRUCTURE.md](./frontend/STRUCTURE.md) — `pages/public`, `pages/protected`, `pages/admin`, shared `components/`, `services/api.js` |
+| Backend | [backend/STRUCTURE.md](./backend/STRUCTURE.md) — routes, controllers, middleware, models; same public / protected / admin access levels |
+
 ## Quick run
 
 ```bash
