@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { initializeAuth } from '@/store/authSlice';
-import AppRoutes from './routes';
+import AppRoutes from './AppRoutes';
 
-function App() {
+const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,6 +21,6 @@ function App() {
       <Footer />
     </div>
   );
-}
+};
 
 export default App;

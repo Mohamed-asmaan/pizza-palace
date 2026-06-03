@@ -1,9 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuth, logoutUser, updateAuthUser } from '@/store/authSlice';
 
-export const AuthProvider = ({ children }) => children;
-
-export const useAuth = () => {
+const useAuth = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const loading = useSelector((state) => state.auth.loading);
@@ -18,3 +16,5 @@ export const useAuth = () => {
     updateUser: (userData) => dispatch(updateAuthUser(userData)),
   };
 };
+
+export default useAuth;

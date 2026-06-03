@@ -4,8 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import App from '@/app/App';
-import { AuthProvider } from '@/hooks/useAuth';
-import { CartProvider } from '@/hooks/useCart';
+import AuthProvider from '@/hooks/AuthProvider';
+import CartProvider from '@/hooks/CartProvider';
 import { store } from '@/store/store';
 import './index.css';
 

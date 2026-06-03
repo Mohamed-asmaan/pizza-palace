@@ -6,7 +6,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { useCart } from '@/hooks/useCart';
+import useCart from '@/hooks/useCart';
 import { formatPrice } from '@/utils/format';
 import EmptyState from '@/components/ui/EmptyState';
 

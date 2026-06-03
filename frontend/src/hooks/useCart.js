@@ -1,9 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, updateItemQty, removeItem, clearAllItems } from '@/store/cartSlice';
 
-export const CartProvider = ({ children }) => children;
-
-export const useCart = () => {
+const useCart = () => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.cart.items);
 
@@ -20,3 +18,5 @@ export const useCart = () => {
     clearCart: () => dispatch(clearAllItems()),
   };
 };
+
+export default useCart;

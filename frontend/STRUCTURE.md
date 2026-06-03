@@ -26,7 +26,7 @@ frontend/
 | File | Purpose |
 |------|---------|
 | `App.jsx` | Root layout: navbar, footer, auth init on load |
-| `routes.jsx` | **Only place** that maps URLs → screen components |
+| `AppRoutes.jsx` | **Only place** that maps URLs → screen components |
 
 Route-level screens are **not** stored under `app/`; they live in `features/` so each domain stays together.
 
@@ -46,7 +46,7 @@ Feature-specific markup stays in `features/`, not here.
 
 Each subfolder is a **business area**. Files here are **route screens** (full-page views), named after the page they render (e.g. `Menu.jsx` → `/menu`).
 
-There is **no** `pages/` subfolder: the feature name already scopes the screen, and `app/routes.jsx` is the single route map.
+There is **no** `pages/` subfolder: the feature name already scopes the screen, and `app/AppRoutes.jsx` is the single route map.
 
 | Feature | Screens | Routes |
 |---------|---------|--------|
@@ -95,6 +95,6 @@ import { formatPrice } from '@/utils/format';
 ## Adding a new screen
 
 1. Create `src/features/<area>/<ScreenName>.jsx`.
-2. Register the path in `src/app/routes.jsx`.
+2. Register the path in `src/app/AppRoutes.jsx`.
 3. Add nav link in `src/components/layout/Navbar.jsx` if it should appear in the menu.
-4. Wrap with `ProtectedRoute` or `AdminRoute` in `routes.jsx` when access must be restricted.
+4. Wrap with `ProtectedRoute` or `AdminRoute` in `AppRoutes.jsx` when access must be restricted.
