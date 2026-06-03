@@ -7,7 +7,7 @@
 const crypto = require('crypto');
 const Razorpay = require('razorpay');
 const Order = require('../models/Order');
-const { validateAndBuildOrderItems } = require('../utils/orderItems');
+const validateAndBuildOrderItems = require('../utils/validateAndBuildOrderItems');
 
 // only create Razorpay client when test keys are in .env (project uses test mode only)
 const getRazorpayInstance = () => {

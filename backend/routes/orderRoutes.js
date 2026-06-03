@@ -17,12 +17,13 @@ const {
   updateOrderStatus,
   cancelOrder,
 } = require('../controllers/orderController');
-const { verifyToken, isAdmin } = require('../middleware/auth');
-const { handleValidationErrors } = require('../controllers/authController');
+const verifyToken = require('../middleware/verifyToken');
+const isAdmin = require('../middleware/isAdmin');
+const handleValidationErrors = require('../middleware/handleValidationErrors');
 
-const router = express.Router();
+const orderRoutes = express.Router();
 
-router.post(
+orderRoutes.post(
   '/',
   verifyToken,
   [
@@ -35,10 +36,10 @@ router.post(
   placeOrder
 );
 
-router.get('/my', verifyToken, getMyOrders);
-router.get('/', verifyToken, isAdmin, getAllOrders);
+orderRoutes.get('/my', verifyToken, getMyOrders);
+orderRoutes.get('/', verifyToken, isAdmin, getAllOrders);
 
-router.put(
+orderRoutes.put(
   '/:id/status',
   verifyToken,
   isAdmin,
@@ -47,6 +48,6 @@ router.put(
   updateOrderStatus
 );
 
-router.delete('/:id', verifyToken, cancelOrder);
+orderRoutes.delete('/:id', verifyToken, cancelOrder);
 
-module.exports = router;
+module.exports = orderRoutes;

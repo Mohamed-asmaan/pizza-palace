@@ -4,7 +4,6 @@
 // ============================================
 
 const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
 const User = require('../models/User');
 
 // make jwt token after login (valid 24 hours)
@@ -12,19 +11,6 @@ const generateToken = (user) =>
   jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
     expiresIn: '24h',
   });
-
-const handleValidationErrors = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      success: false,
-      message: 'Validation failed',
-      statusCode: 400,
-      errors: errors.array().map((e) => ({ field: e.path, message: e.msg })),
-    });
-  }
-  next();
-};
 
 // POST /api/auth/register — new customer account + auto login token
 const register = async (req, res, next) => {
@@ -144,5 +130,4 @@ module.exports = {
   login,
   getProfile,
   updateProfile,
-  handleValidationErrors,
 };

@@ -14,13 +14,13 @@ const {
   login,
   getProfile,
   updateProfile,
-  handleValidationErrors,
 } = require('../controllers/authController');
-const { verifyToken } = require('../middleware/auth');
+const verifyToken = require('../middleware/verifyToken');
+const handleValidationErrors = require('../middleware/handleValidationErrors');
 
-const router = express.Router();
+const authRoutes = express.Router();
 
-router.post(
+authRoutes.post(
   '/register',
   [
     body('name').trim().notEmpty().withMessage('Name is required'),
@@ -31,7 +31,7 @@ router.post(
   register
 );
 
-router.post(
+authRoutes.post(
   '/login',
   [
     body('email').isEmail().withMessage('Valid email is required'),
@@ -41,9 +41,9 @@ router.post(
   login
 );
 
-router.get('/profile', verifyToken, getProfile);
+authRoutes.get('/profile', verifyToken, getProfile);
 
-router.put(
+authRoutes.put(
   '/profile',
   verifyToken,
   [
@@ -55,4 +55,4 @@ router.put(
   updateProfile
 );
 
-module.exports = router;
+module.exports = authRoutes;

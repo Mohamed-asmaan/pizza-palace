@@ -17,24 +17,17 @@ const {
   updatePizza,
   deletePizza,
 } = require('../controllers/pizzaController');
-const { verifyToken, isAdmin } = require('../middleware/auth');
-const { handleValidationErrors } = require('../controllers/authController');
+const verifyToken = require('../middleware/verifyToken');
+const isAdmin = require('../middleware/isAdmin');
+const optionalAuth = require('../middleware/optionalAuth');
+const handleValidationErrors = require('../middleware/handleValidationErrors');
 
-const router = express.Router();
+const pizzaRoutes = express.Router();
 
-// if user sent a token, attach user to req; if not, still allow public menu view
-const optionalAuth = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    return verifyToken(req, res, next);
-  }
-  next();
-};
+pizzaRoutes.get('/', optionalAuth, getAllPizzas);
+pizzaRoutes.get('/:id', optionalAuth, getPizzaById);
 
-router.get('/', optionalAuth, getAllPizzas);
-router.get('/:id', optionalAuth, getPizzaById);
-
-router.post(
+pizzaRoutes.post(
   '/',
   verifyToken,
   isAdmin,
@@ -50,7 +43,7 @@ router.post(
   createPizza
 );
 
-router.put(
+pizzaRoutes.put(
   '/:id',
   verifyToken,
   isAdmin,
@@ -66,6 +59,6 @@ router.put(
   updatePizza
 );
 
-router.delete('/:id', verifyToken, isAdmin, deletePizza);
+pizzaRoutes.delete('/:id', verifyToken, isAdmin, deletePizza);
 
-module.exports = router;
+module.exports = pizzaRoutes;

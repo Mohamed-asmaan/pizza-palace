@@ -1,5 +1,5 @@
 // ============================================
-// orderItems.js - CHECK CART ITEMS BEFORE ORDER
+// validateAndBuildOrderItems.js - CHECK CART ITEMS BEFORE ORDER
 // Loads each pizza from DB, checks it exists and is available,
 // then returns line items + total price for payment/order
 // ============================================
@@ -30,4 +30,4 @@ const validateAndBuildOrderItems = async (items) => {
   return { orderItems, totalAmount };
 };
 
-module.exports = { validateAndBuildOrderItems };
+module.exports = validateAndBuildOrderItems;

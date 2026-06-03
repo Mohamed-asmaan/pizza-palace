@@ -1,7 +1,5 @@
 // ============================================
-// auth.js - CHECK IF USER IS LOGGED IN (middleware)
-// verifyToken = must send Bearer token in header
-// isAdmin = user role must be admin
+// verifyToken.js - JWT auth middleware (Bearer token required)
 // ============================================
 
 const jwt = require('jsonwebtoken');
@@ -19,7 +17,7 @@ const verifyToken = async (req, res, next) => {
       });
     }
 
-    const token = authHeader.split(' ')[1]; // format: "Bearer <token>"
+    const token = authHeader.split(' ')[1];
 
     let decoded;
     try {
@@ -48,15 +46,4 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-const isAdmin = (req, res, next) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({
-      success: false,
-      message: 'Access denied. Admin privileges required.',
-      statusCode: 403,
-    });
-  }
-  next();
-};
-
-module.exports = { verifyToken, isAdmin };
+module.exports = verifyToken;

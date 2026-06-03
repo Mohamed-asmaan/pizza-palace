@@ -2,7 +2,7 @@
 // orderController.js - PLACE ORDER, VIEW ORDERS, CANCEL
 // ============================================
 const Order = require('../models/Order');
-const { validateAndBuildOrderItems } = require('../utils/orderItems');
+const validateAndBuildOrderItems = require('../utils/validateAndBuildOrderItems');
 
 // allowed values admin can pick in dropdown
 const VALID_STATUSES = ['Pending', 'Confirmed', 'Preparing', 'Out for Delivery', 'Delivered'];

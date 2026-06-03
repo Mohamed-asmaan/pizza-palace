@@ -13,12 +13,11 @@ const {
   createPaymentOrder,
   verifyPayment,
 } = require('../controllers/paymentController');
-const { verifyToken } = require('../middleware/auth');
-const { handleValidationErrors } = require('../controllers/authController');
+const verifyToken = require('../middleware/verifyToken');
+const handleValidationErrors = require('../middleware/handleValidationErrors');
 
-const router = express.Router();
+const paymentRoutes = express.Router();
 
-// same cart item rules used for create-order and verify
 const orderItemsValidation = [
   body('items').isArray({ min: 1 }).withMessage('Order must contain at least one item'),
   body('items.*.pizza').notEmpty().withMessage('Pizza ID is required'),
@@ -30,11 +29,9 @@ const orderItemsValidation = [
     .withMessage('Quantity must be at least 1'),
 ];
 
-// public - frontend checks if online payment is available
-router.get('/config', getPaymentConfig);
+paymentRoutes.get('/config', getPaymentConfig);
 
-// step 1: logged-in user starts payment (returns razorpay order id)
-router.post(
+paymentRoutes.post(
   '/create-order',
   verifyToken,
   orderItemsValidation,
@@ -42,8 +39,7 @@ router.post(
   createPaymentOrder
 );
 
-// step 2: after Razorpay popup, frontend sends payment ids here to confirm
-router.post(
+paymentRoutes.post(
   '/verify',
   verifyToken,
   [
@@ -57,4 +53,4 @@ router.post(
   verifyPayment
 );
 
-module.exports = router;
+module.exports = paymentRoutes;
