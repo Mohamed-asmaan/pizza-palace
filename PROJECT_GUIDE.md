@@ -24,6 +24,7 @@ Master index + 2-hour reading plan + locator for all 47 source files.
 
 | App | Doc |
 |-----|-----|
+| **Full map (FE ↔ BE)** | [docs/06-ARCHITECTURE-OVERVIEW.md](./docs/06-ARCHITECTURE-OVERVIEW.md) — communication, functions per file, flows |
 | Frontend | [frontend/STRUCTURE.md](./frontend/STRUCTURE.md) — `pages/public`, `pages/protected`, `pages/admin`, shared `components/`, `services/api.js` |
 | Backend | [backend/STRUCTURE.md](./backend/STRUCTURE.md) — routes, controllers, middleware, models; same public / protected / admin access levels |
 

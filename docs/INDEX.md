@@ -22,6 +22,7 @@
 | [03-INTEGRATIONS-AND-FLOWS.md](./03-INTEGRATIONS-AND-FLOWS.md) | Every npm package + browser API; labeled end-to-end flows; diagrams |
 | [04-API-DATA-AND-REVIEW.md](./04-API-DATA-AND-REVIEW.md) | All endpoints, bodies, responses, status codes, localStorage keys, review Q&A |
 | [05-LINE-BY-LINE-CHECKOUT-AND-PAYMENT.md](./05-LINE-BY-LINE-CHECKOUT-AND-PAYMENT.md) | Checkout + payment walkthrough + full annotated code |
+| [06-ARCHITECTURE-OVERVIEW.md](./06-ARCHITECTURE-OVERVIEW.md) | **Full app map:** FE/BE folders, API table, functions per file, flows |
 
 **Every doc ends with a `## Code —` section:** real snippets from the repo + what each part does (nothing removed from earlier text).
 
