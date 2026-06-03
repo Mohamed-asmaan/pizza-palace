@@ -91,7 +91,7 @@ Auth + cart also touch **localStorage** before/without server.
 | localStorage | token, user, cart |
 | Intl API | format.js |
 | MongoDB | external database |
-| fs/path | importCatalog read JSON |
+| Mongoose `insertMany` | importCatalog seed on empty DB |
 
 ---
 

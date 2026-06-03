@@ -235,17 +235,10 @@ Wraps **morgan**:
 **Runs once at server start** (after DB connect).
 
 1. `Pizza.countDocuments()` — if > 0, log "already in database" and skip.
-2. Else read `backend/data/pizzas.json` via `fs.readFileSync`.
-3. `Pizza.insertMany(catalog)` — 8 pizzas in default file.
-4. `ensureAdminUser()` — if `ADMIN_EMAIL` + `ADMIN_PASSWORD` in env and no user with that email → create `role: 'admin'`.
+2. Else `Pizza.insertMany(DEFAULT_PIZZAS)` — 8 default pizzas defined in this file (not read from disk).
+3. `ensureAdminUser()` — if `ADMIN_EMAIL` + `ADMIN_PASSWORD` in env and no user with that email → create `role: 'admin'`.
 
----
-
-## data/pizzas.json
-
-Static seed: 8 pizzas (Margherita, Farmhouse, Pepperoni, etc.) with prices in INR (299–599).
-
-Fields match `Pizza` schema exactly — no `_id` (Mongo generates on insert).
+**Runtime menu:** all API routes read from MongoDB only. The inline `DEFAULT_PIZZAS` array is seed data for an empty database on first server start.
 
 ---
 

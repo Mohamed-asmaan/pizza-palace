@@ -48,7 +48,6 @@
 | `backend/controllers/paymentController.js` | [01 § paymentController](./01-BACKEND-FILE-BY-FILE.md#controllerspaymentcontrollerjs) |
 | `backend/utils/orderItems.js` | [01 § orderItems](./01-BACKEND-FILE-BY-FILE.md#utilsorderitemsjs) |
 | `backend/utils/importCatalog.js` | [01 § importCatalog](./01-BACKEND-FILE-BY-FILE.md#utilsimportcatalogjs) |
-| `backend/data/pizzas.json` | [01 § pizzas.json](./01-BACKEND-FILE-BY-FILE.md#datapizzasjson) |
 
 ### Frontend (24 files)
 

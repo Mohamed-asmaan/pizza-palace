@@ -12,7 +12,7 @@ Master index + 2-hour reading plan + locator for all 47 source files.
 
 | Document | What you get |
 |----------|----------------|
-| [docs/01-BACKEND-FILE-BY-FILE.md](./docs/01-BACKEND-FILE-BY-FILE.md) | Every backend file: server, models, middleware, routes, controllers, utils, seed JSON |
+| [docs/01-BACKEND-FILE-BY-FILE.md](./docs/01-BACKEND-FILE-BY-FILE.md) | Every backend file: server, models, middleware, routes, controllers, utils |
 | [docs/02-FRONTEND-FILE-BY-FILE.md](./docs/02-FRONTEND-FILE-BY-FILE.md) | Every frontend file: Vite, CSS, store, context, api, all pages & components |
 | [docs/03-INTEGRATIONS-AND-FLOWS.md](./docs/03-INTEGRATIONS-AND-FLOWS.md) | Every npm package + browser API; flows A–G with library labels; diagrams |
 | [docs/04-API-DATA-AND-REVIEW.md](./docs/04-API-DATA-AND-REVIEW.md) | Request/response JSON, errors, localStorage, deploy, Q&A, 5-min script |
