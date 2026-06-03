@@ -33,18 +33,20 @@ const ensureAdminUser = async () => {
 };
 
 const importCatalog = async () => {
+  let imported = 0;
   const pizzaCount = await Pizza.countDocuments();
   if (pizzaCount > 0) {
     console.log('Menu catalog already in database');
-    return { imported: 0, skipped: true };
+  } else {
+    const catalog = loadCatalog();
+    await Pizza.insertMany(catalog);
+    imported = catalog.length;
+    console.log(`Imported ${catalog.length} pizzas from backend catalog`);
   }
 
-  const catalog = loadCatalog();
-  await Pizza.insertMany(catalog);
   await ensureAdminUser();
 
-  console.log(`Imported ${catalog.length} pizzas from backend catalog`);
-  return { imported: catalog.length, skipped: false };
+  return { imported, skipped: pizzaCount > 0 };
 };
 
 module.exports = { importCatalog, loadCatalog };
