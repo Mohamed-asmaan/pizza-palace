@@ -5,7 +5,7 @@
 
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { formatPrice } from '../utils/format';
+import { formatPrice } from '@/utils/format';
 
 const PizzaCard = ({ pizza }) => (
   <motion.div

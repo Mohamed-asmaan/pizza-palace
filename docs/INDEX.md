@@ -65,12 +65,13 @@
 | `frontend/src/store/store.js` | [02 § store](./02-FRONTEND-FILE-BY-FILE.md#storestorejs) |
 | `frontend/src/store/authSlice.js` | [02 § authSlice](./02-FRONTEND-FILE-BY-FILE.md#storeauthslicejs) |
 | `frontend/src/store/cartSlice.js` | [02 § cartSlice](./02-FRONTEND-FILE-BY-FILE.md#storecartslicejs) |
-| `frontend/src/context/AuthContext.jsx` | [02 § AuthContext](./02-FRONTEND-FILE-BY-FILE.md#contextauthcontextjsx) |
-| `frontend/src/context/CartContext.jsx` | [02 § CartContext](./02-FRONTEND-FILE-BY-FILE.md#contextcartcontextjsx) |
+| `frontend/src/hooks/useAuth.js` | [02 § AuthContext](./02-FRONTEND-FILE-BY-FILE.md#contextauthcontextjsx) |
+| `frontend/src/hooks/useCart.js` | [02 § CartContext](./02-FRONTEND-FILE-BY-FILE.md#contextcartcontextjsx) |
+| `frontend/STRUCTURE.md` | Folder layout and where to add code |
 | `frontend/src/utils/format.js` | [02 § format](./02-FRONTEND-FILE-BY-FILE.md#utilsformatjs) |
 | `frontend/src/utils/razorpay.js` | [02 § razorpay](./02-FRONTEND-FILE-BY-FILE.md#utilsrazorpayjs) |
-| `frontend/src/components/*` (8 files) | [02 § components](./02-FRONTEND-FILE-BY-FILE.md#components) |
-| `frontend/src/pages/*` (11 files) | [02 § pages](./02-FRONTEND-FILE-BY-FILE.md#pages) |
+| `frontend/src/components/*` | [02 § components](./02-FRONTEND-FILE-BY-FILE.md#components) — `layout/`, `ui/`, `guards/` |
+| `frontend/src/features/*/pages/*` (11 route pages) | Grouped by feature; see [STRUCTURE.md](../frontend/STRUCTURE.md) |
 
 ### Config / deploy (not application logic, but documented)
 

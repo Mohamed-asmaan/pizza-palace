@@ -4,8 +4,8 @@
 // ============================================
 
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import SkeletonLoader from './SkeletonLoader';
+import { useAuth } from '@/hooks/useAuth';
+import SkeletonLoader from '@/components/ui/SkeletonLoader';
 
 const AdminRoute = ({ children }) => {
   const { isAdmin, loading, isAuthenticated } = useAuth();

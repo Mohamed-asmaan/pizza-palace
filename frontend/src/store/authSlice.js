@@ -5,7 +5,7 @@
 // ============================================
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { authAPI } from '../services/api';
+import { authAPI } from '@/services/api';
 
 // read user from browser storage on first load
 const getStoredUser = () => {

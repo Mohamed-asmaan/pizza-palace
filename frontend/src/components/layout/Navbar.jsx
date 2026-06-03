@@ -6,8 +6,8 @@
 
 import { Link, NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
+import { useAuth } from '@/hooks/useAuth';
+import { useCart } from '@/hooks/useCart';
 
 const Navbar = () => {
   const { user, isAuthenticated, isAdmin, logout } = useAuth();

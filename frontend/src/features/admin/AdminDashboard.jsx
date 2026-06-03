@@ -6,9 +6,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { orderAPI } from '../services/api';
-import { formatPrice } from '../utils/format';
-import SkeletonLoader from '../components/SkeletonLoader';
+import { orderAPI } from '@/services/api';
+import { formatPrice } from '@/utils/format';
+import SkeletonLoader from '@/components/ui/SkeletonLoader';
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);

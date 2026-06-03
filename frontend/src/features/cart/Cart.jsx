@@ -6,9 +6,9 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { useCart } from '../context/CartContext';
-import { formatPrice } from '../utils/format';
-import EmptyState from '../components/EmptyState';
+import { useCart } from '@/hooks/useCart';
+import { formatPrice } from '@/utils/format';
+import EmptyState from '@/components/ui/EmptyState';
 
 const Cart = () => {
   const { items, updateQuantity, removeFromCart, total } = useCart();

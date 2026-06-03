@@ -6,11 +6,11 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { orderAPI } from '../services/api';
-import { formatPrice, formatDate } from '../utils/format';
-import StatusBadge from '../components/StatusBadge';
-import SkeletonLoader from '../components/SkeletonLoader';
-import EmptyState from '../components/EmptyState';
+import { orderAPI } from '@/services/api';
+import { formatPrice, formatDate } from '@/utils/format';
+import StatusBadge from '@/components/ui/StatusBadge';
+import SkeletonLoader from '@/components/ui/SkeletonLoader';
+import EmptyState from '@/components/ui/EmptyState';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);

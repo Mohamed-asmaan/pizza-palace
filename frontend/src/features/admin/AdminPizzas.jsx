@@ -7,9 +7,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { pizzaAPI } from '../services/api';
-import { formatPrice, CATEGORIES } from '../utils/format';
-import SkeletonLoader from '../components/SkeletonLoader';
+import { pizzaAPI } from '@/services/api';
+import { formatPrice } from '@/utils/format';
+import { CATEGORIES } from '@/constants/catalog';
+import SkeletonLoader from '@/components/ui/SkeletonLoader';
 
 const emptyForm = {
   name: '',

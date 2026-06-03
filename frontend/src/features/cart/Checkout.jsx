@@ -7,11 +7,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
-import { orderAPI, paymentAPI } from '../services/api';
-import { formatPrice } from '../utils/format';
-import { loadRazorpayScript, openRazorpayCheckout } from '../utils/razorpay';
+import { useCart } from '@/hooks/useCart';
+import { useAuth } from '@/hooks/useAuth';
+import { orderAPI, paymentAPI } from '@/services/api';
+import { formatPrice } from '@/utils/format';
+import { loadRazorpayScript, openRazorpayCheckout } from '@/utils/razorpay';
 
 const Checkout = () => {
   const { items, total, clearCart } = useCart();

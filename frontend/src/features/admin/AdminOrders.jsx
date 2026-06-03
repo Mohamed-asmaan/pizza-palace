@@ -6,11 +6,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { orderAPI } from '../services/api';
-import { formatPrice, formatDate, ORDER_STATUSES } from '../utils/format';
-import StatusBadge from '../components/StatusBadge';
-import SkeletonLoader from '../components/SkeletonLoader';
-import EmptyState from '../components/EmptyState';
+import { orderAPI } from '@/services/api';
+import { formatPrice, formatDate } from '@/utils/format';
+import { ORDER_STATUSES } from '@/constants/orders';
+import StatusBadge from '@/components/ui/StatusBadge';
+import SkeletonLoader from '@/components/ui/SkeletonLoader';
+import EmptyState from '@/components/ui/EmptyState';
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);

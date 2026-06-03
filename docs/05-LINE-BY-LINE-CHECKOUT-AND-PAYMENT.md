@@ -6,7 +6,7 @@ Use this when the reviewer says **"walk me through payment"** or **"explain chec
 
 ## Checkout.jsx — full walkthrough
 
-**File:** `frontend/src/pages/Checkout.jsx`  
+**File:** `frontend/src/features/cart/pages/Checkout.jsx`  
 **Route:** `/checkout` (wrapped in `ProtectedRoute` — must be logged in)
 
 ### Imports (lines 1–14)

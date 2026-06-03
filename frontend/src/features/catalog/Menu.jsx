@@ -4,11 +4,11 @@
 // ============================================
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { pizzaAPI } from '../services/api';
-import { CATEGORIES } from '../utils/format';
-import PizzaCard from '../components/PizzaCard';
-import SkeletonLoader from '../components/SkeletonLoader';
-import EmptyState from '../components/EmptyState';
+import { pizzaAPI } from '@/services/api';
+import { CATEGORIES } from '@/constants/catalog';
+import PizzaCard from '@/components/ui/PizzaCard';
+import SkeletonLoader from '@/components/ui/SkeletonLoader';
+import EmptyState from '@/components/ui/EmptyState';
 
 const Menu = () => {
   const [pizzas, setPizzas] = useState([]);

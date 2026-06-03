@@ -8,11 +8,11 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { pizzaAPI } from '../services/api';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
-import { formatPrice } from '../utils/format';
-import SkeletonLoader from '../components/SkeletonLoader';
+import { pizzaAPI } from '@/services/api';
+import { useCart } from '@/hooks/useCart';
+import { useAuth } from '@/hooks/useAuth';
+import { formatPrice } from '@/utils/format';
+import SkeletonLoader from '@/components/ui/SkeletonLoader';
 
 const PizzaDetail = () => {
   const { id } = useParams(); // pizza id from URL

@@ -6,9 +6,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { pizzaAPI } from '../services/api';
-import PizzaCard from '../components/PizzaCard';
-import SkeletonLoader from '../components/SkeletonLoader';
+import { pizzaAPI } from '@/services/api';
+import PizzaCard from '@/components/ui/PizzaCard';
+import SkeletonLoader from '@/components/ui/SkeletonLoader';
 
 const Home = () => {
   const [pizzas, setPizzas] = useState([]);
