@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { setAuth, logoutUser, updateAuthUser } from '@/store/authSlice';
+import { setAuth, logoutUser } from '@/store/authSlice';
 
 const useAuth = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,6 @@ const useAuth = () => {
     isAuthenticated: Boolean(user),
     login: (token, userData) => dispatch(setAuth({ token, user: userData })),
     logout: () => dispatch(logoutUser()),
-    updateUser: (userData) => dispatch(updateAuthUser(userData)),
   };
 };
 
