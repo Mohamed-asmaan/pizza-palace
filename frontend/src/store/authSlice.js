@@ -1,10 +1,11 @@
 // ============================================
 // authSlice.js - LOGIN STATE (Redux)
 // Saves token + user in localStorage so refresh keeps you logged in
-// App.jsx checks the saved token with the backend on first load
+// initializeAuth runs on app load (see App.jsx)
 // ============================================
 
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { authAPI } from '@/services/api';
 
 // read user from browser storage on first load
 const getStoredUser = () => {
@@ -17,11 +18,26 @@ const getStoredUser = () => {
   }
 };
 
+// called once when app opens - validates token with backend
+export const initializeAuth = createAsyncThunk('auth/initialize', async (_, { rejectWithValue }) => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return { user: null };
+  }
+
+  try {
+    const res = await authAPI.getProfile();
+    return { user: res.data.data };
+  } catch (err) {
+    return rejectWithValue(err?.response?.data?.message || 'Session expired');
+  }
+});
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: getStoredUser(),
-    loading: true, // true until App.jsx finishes checking the saved token
+    loading: true, // true until initializeAuth finishes
   },
   reducers: {
     // after login or register
@@ -32,14 +48,6 @@ const authSlice = createSlice({
       state.user = user;
       state.loading = false;
     },
-    // App.jsx calls this after the backend confirms the saved token is still good
-    setUser: (state, action) => {
-      state.user = action.payload;
-      if (action.payload) {
-        localStorage.setItem('user', JSON.stringify(action.payload));
-      }
-      state.loading = false;
-    },
     logoutUser: (state) => {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -47,7 +55,27 @@ const authSlice = createSlice({
       state.loading = false;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(initializeAuth.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(initializeAuth.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        if (action.payload.user) {
+          localStorage.setItem('user', JSON.stringify(action.payload.user));
+        }
+        state.loading = false;
+      })
+      .addCase(initializeAuth.rejected, (state) => {
+        // bad or expired token - clear storage
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        state.user = null;
+        state.loading = false;
+      });
+  },
 });
 
-export const { setAuth, setUser, logoutUser } = authSlice.actions;
+export const { setAuth, logoutUser } = authSlice.actions;
 export default authSlice.reducer;

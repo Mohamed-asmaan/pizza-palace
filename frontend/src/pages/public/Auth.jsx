@@ -16,12 +16,8 @@ const Auth = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
   // ProtectedRoute saves where user wanted to go before login (e.g. /cart)
-  let from = '/';
-  if (location.state && location.state.from) {
-    from = location.state.from.pathname;
-  }
+  const from = location.state?.from?.pathname || '/';
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -49,11 +45,7 @@ const Auth = () => {
       // admins go to dashboard; customers return to page they tried to open
       navigate(user.role === 'admin' ? '/admin' : from);
     } catch (err) {
-      let message = 'Authentication failed';
-      if (err.response && err.response.data && err.response.data.message) {
-        message = err.response.data.message;
-      }
-      toast.error(message);
+      toast.error(err.response?.data?.message || 'Authentication failed');
     } finally {
       setLoading(false);
     }

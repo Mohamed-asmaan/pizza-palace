@@ -2,7 +2,7 @@
 // Menu.jsx - FULL MENU PAGE
 // Category buttons call API with filter; search filters results on the client
 // ============================================
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { pizzaAPI } from '@/services/api';
 import { CATEGORIES } from '@/constants/catalog';
 import PizzaCard from '@/components/ui/PizzaCard';
@@ -17,35 +17,26 @@ const Menu = () => {
 
   // reload pizzas when user picks a category tab
   useEffect(() => {
-    const loadPizzas = async () => {
-      setLoading(true);
-      try {
-        const params = {};
-        if (category !== 'All') {
-          params.category = category;
-        }
-        const res = await pizzaAPI.getAll(params);
-        setPizzas(res.data.data);
-      } catch {
-        setPizzas([]);
-      }
-      setLoading(false);
-    };
-
-    loadPizzas();
+    setLoading(true);
+    const params = category !== 'All' ? { category } : {};
+    pizzaAPI
+      .getAll(params)
+      .then((res) => setPizzas(res.data.data))
+      .catch(() => setPizzas([]))
+      .finally(() => setLoading(false));
   }, [category]);
 
-  // search box filters the already-loaded pizzas (no extra API calls while typing)
-  const query = search.trim().toLowerCase();
-  let filteredPizzas = pizzas;
-  if (query) {
-    filteredPizzas = pizzas.filter(
+  // search box runs locally so we don't need extra API calls while typing
+  const filteredPizzas = useMemo(() => {
+    if (!search.trim()) return pizzas;
+    const query = search.toLowerCase();
+    return pizzas.filter(
       (p) =>
         p.name.toLowerCase().includes(query) ||
         p.description.toLowerCase().includes(query) ||
         p.category.toLowerCase().includes(query)
     );
-  }
+  }, [pizzas, search]);
 
   return (
     <div className="container mx-auto px-4 py-8">

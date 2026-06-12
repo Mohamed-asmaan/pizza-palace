@@ -15,17 +15,11 @@ const Home = () => {
 
   // home page only shows 4 featured pizzas, not the full menu
   useEffect(() => {
-    const loadFeaturedPizzas = async () => {
-      try {
-        const res = await pizzaAPI.getAll();
-        setPizzas(res.data.data.slice(0, 4)); // take the first 4 only
-      } catch {
-        setPizzas([]);
-      }
-      setLoading(false);
-    };
-
-    loadFeaturedPizzas();
+    pizzaAPI
+      .getAll()
+      .then((res) => setPizzas(res.data.data.slice(0, 4)))
+      .catch(() => setPizzas([]))
+      .finally(() => setLoading(false));
   }, []);
 
   return (

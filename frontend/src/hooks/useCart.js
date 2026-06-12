@@ -5,13 +5,8 @@ const useCart = () => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.cart.items);
 
-  // add up the cart total and number of items with a simple loop
-  let total = 0;
-  let itemCount = 0;
-  for (const item of items) {
-    total = total + item.pizza.price * item.qty;
-    itemCount = itemCount + item.qty;
-  }
+  const total = items.reduce((sum, item) => sum + item.pizza.price * item.qty, 0);
+  const itemCount = items.reduce((sum, item) => sum + item.qty, 0);
 
   return {
     items,

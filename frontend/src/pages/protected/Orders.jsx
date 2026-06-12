@@ -15,15 +15,13 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchOrders = async () => {
+  const fetchOrders = () => {
     setLoading(true);
-    try {
-      const res = await orderAPI.getMyOrders();
-      setOrders(res.data.data);
-    } catch {
-      toast.error('Failed to load orders');
-    }
-    setLoading(false);
+    orderAPI
+      .getMyOrders()
+      .then((res) => setOrders(res.data.data))
+      .catch(() => toast.error('Failed to load orders'))
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -37,11 +35,7 @@ const Orders = () => {
       toast.success('Order cancelled');
       fetchOrders();
     } catch (err) {
-      let message = 'Failed to cancel order';
-      if (err.response && err.response.data && err.response.data.message) {
-        message = err.response.data.message;
-      }
-      toast.error(message);
+      toast.error(err.response?.data?.message || 'Failed to cancel order');
     }
   };
 

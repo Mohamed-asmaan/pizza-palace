@@ -24,18 +24,14 @@ const PizzaDetail = () => {
 
   // fetch pizza when page opens or when URL id changes
   useEffect(() => {
-    const loadPizza = async () => {
-      try {
-        const res = await pizzaAPI.getById(id);
-        setPizza(res.data.data);
-      } catch {
+    pizzaAPI
+      .getById(id)
+      .then((res) => setPizza(res.data.data))
+      .catch(() => {
         toast.error('Pizza not found');
         navigate('/menu');
-      }
-      setLoading(false);
-    };
-
-    loadPizza();
+      })
+      .finally(() => setLoading(false));
   }, [id, navigate]);
 
   const handleAddToCart = () => {
@@ -81,9 +77,7 @@ const PizzaDetail = () => {
             <div className="flex items-center border border-gray-300 rounded-lg">
               <button
                 type="button"
-                onClick={() => {
-                  if (qty > 1) setQty(qty - 1); // never go below 1
-                }}
+                onClick={() => setQty((q) => Math.max(1, q - 1))}
                 className="px-4 py-2 hover:bg-gray-100 rounded-l-lg"
                 aria-label="Decrease quantity"
               >
@@ -94,7 +88,7 @@ const PizzaDetail = () => {
               </span>
               <button
                 type="button"
-                onClick={() => setQty(qty + 1)}
+                onClick={() => setQty((q) => q + 1)}
                 className="px-4 py-2 hover:bg-gray-100 rounded-r-lg"
                 aria-label="Increase quantity"
               >

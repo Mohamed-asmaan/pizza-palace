@@ -20,7 +20,15 @@ export const loadRazorpayScript = () =>
     document.body.appendChild(script);
   });
 
-export const openRazorpayCheckout = ({ keyId, amount, currency, orderId, user }) =>
+export const openRazorpayCheckout = ({
+  keyId,
+  amount,
+  currency,
+  orderId,
+  user,
+  onSuccess,
+  onDismiss,
+}) =>
   new Promise((resolve, reject) => {
     if (!window.Razorpay) {
       reject(new Error('Razorpay SDK failed to load'));
@@ -34,20 +42,20 @@ export const openRazorpayCheckout = ({ keyId, amount, currency, orderId, user })
       name: 'Pizza Palace',
       description: 'Pizza order payment',
       order_id: orderId,
-      // Razorpay calls this when payment succeeds
       handler: (response) => {
+        onSuccess(response);
         resolve(response);
       },
       prefill: {
-        name: user ? user.name : '',
-        email: user ? user.email : '',
+        name: user?.name || '',
+        email: user?.email || '',
       },
       theme: {
         color: '#E63946',
       },
       modal: {
-        // user closed the popup without paying
         ondismiss: () => {
+          onDismiss?.();
           reject(new Error('Payment cancelled'));
         },
       },
@@ -55,11 +63,7 @@ export const openRazorpayCheckout = ({ keyId, amount, currency, orderId, user })
 
     const razorpay = new window.Razorpay(options);
     razorpay.on('payment.failed', (response) => {
-      let message = 'Payment failed';
-      if (response.error && response.error.description) {
-        message = response.error.description;
-      }
-      reject(new Error(message));
+      reject(new Error(response.error?.description || 'Payment failed'));
     });
     razorpay.open();
   });

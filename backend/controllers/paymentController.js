@@ -19,9 +19,9 @@ const getRazorpayInstance = () => {
   }
 
   if (!keyId.startsWith('rzp_test_')) {
-    const error = new Error('Only Razorpay test keys (rzp_test_*) are allowed');
-    error.statusCode = 500;
-    throw error;
+    throw Object.assign(new Error('Only Razorpay test keys (rzp_test_*) are allowed'), {
+      statusCode: 500,
+    });
   }
 
   return new Razorpay({ key_id: keyId, key_secret: keySecret });

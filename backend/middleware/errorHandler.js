@@ -11,16 +11,10 @@ const errorHandler = (err, req, res, next) => {
   if (err.name === 'ValidationError') {
     statusCode = 400;
     message = 'Validation failed';
-
-    // collect each field error into a simple list
-    const errors = [];
-    for (const fieldName in err.errors) {
-      errors.push({
-        field: err.errors[fieldName].path,
-        message: err.errors[fieldName].message,
-      });
-    }
-
+    const errors = Object.values(err.errors).map((e) => ({
+      field: e.path,
+      message: e.message,
+    }));
     return res.status(statusCode).json({
       success: false,
       message,

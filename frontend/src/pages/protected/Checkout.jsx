@@ -23,18 +23,16 @@ const Checkout = () => {
 
   // ask backend if Razorpay test keys are set up
   useEffect(() => {
-    const loadPaymentConfig = async () => {
-      try {
-        const res = await paymentAPI.getConfig();
+    paymentAPI
+      .getConfig()
+      .then((res) => {
         setPaymentEnabled(res.data.data.enabled);
         setTestMode(res.data.data.testMode);
-      } catch {
+      })
+      .catch(() => {
         setPaymentEnabled(false);
         setTestMode(false);
-      }
-    };
-
-    loadPaymentConfig();
+      });
   }, []);
 
   // empty cart should not reach checkout
@@ -43,11 +41,11 @@ const Checkout = () => {
     return null;
   }
 
-  // backend expects { pizza: mongoId, qty } not the full pizza object
-  const orderItems = [];
-  for (const item of items) {
-    orderItems.push({ pizza: item.pizza._id, qty: item.qty });
-  }
+  // backend expects { pizza: mongoId, qty } not full pizza object
+  const orderItems = items.map(({ pizza, qty }) => ({
+    pizza: pizza._id,
+    qty,
+  }));
 
   // cash on delivery - no Razorpay
   const placeCodOrder = async () => {
@@ -77,6 +75,7 @@ const Checkout = () => {
       currency,
       orderId: razorpayOrderId,
       user,
+      onSuccess: (response) => response,
     });
 
     await paymentAPI.verify({
@@ -108,14 +107,15 @@ const Checkout = () => {
         await placeCodOrder();
       }
     } catch (err) {
-      // user closing the payment popup is not a real error - stay quiet
       if (err.message !== 'Payment cancelled') {
-        // prefer the error message sent by the backend, if there is one
-        let message = err.message || 'Failed to place order';
-        if (err.response && err.response.data && err.response.data.message) {
-          message = err.response.data.message;
-        }
-        toast.error(message);
+        var apiMsg = err.response && err.response.data && err.response.data.message;
+        var validationMsg =
+          err.response &&
+          err.response.data &&
+          err.response.data.errors &&
+          err.response.data.errors[0] &&
+          err.response.data.errors[0].message;
+        toast.error(apiMsg || validationMsg || err.message || 'Failed to place order');
       }
     } finally {
       setLoading(false);

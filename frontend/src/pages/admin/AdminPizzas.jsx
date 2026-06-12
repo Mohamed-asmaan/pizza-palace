@@ -27,15 +27,13 @@ const AdminPizzas = () => {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
 
-  const fetchPizzas = async () => {
+  const fetchPizzas = () => {
     setLoading(true);
-    try {
-      const res = await pizzaAPI.getAll();
-      setPizzas(res.data.data);
-    } catch {
-      toast.error('Failed to load pizzas');
-    }
-    setLoading(false);
+    pizzaAPI
+      .getAll()
+      .then((res) => setPizzas(res.data.data))
+      .catch(() => toast.error('Failed to load pizzas'))
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -78,11 +76,7 @@ const AdminPizzas = () => {
       setShowModal(false);
       fetchPizzas();
     } catch (err) {
-      let message = 'Operation failed';
-      if (err.response && err.response.data && err.response.data.message) {
-        message = err.response.data.message;
-      }
-      toast.error(message);
+      toast.error(err.response?.data?.message || 'Operation failed');
     }
   };
 
@@ -93,11 +87,7 @@ const AdminPizzas = () => {
       toast.success('Pizza deleted');
       fetchPizzas();
     } catch (err) {
-      let message = 'Delete failed';
-      if (err.response && err.response.data && err.response.data.message) {
-        message = err.response.data.message;
-      }
-      toast.error(message);
+      toast.error(err.response?.data?.message || 'Delete failed');
     }
   };
 
@@ -108,11 +98,7 @@ const AdminPizzas = () => {
       toast.success(`${pizza.name} ${pizza.isAvailable ? 'hidden from' : 'shown on'} menu`);
       fetchPizzas();
     } catch (err) {
-      let message = 'Update failed';
-      if (err.response && err.response.data && err.response.data.message) {
-        message = err.response.data.message;
-      }
-      toast.error(message);
+      toast.error(err.response?.data?.message || 'Update failed');
     }
   };
 
