@@ -14,22 +14,32 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    orderAPI
-      .getAllOrders()
-      .then((res) => setOrders(res.data.data))
-      .catch(() => setOrders([]))
-      .finally(() => setLoading(false));
+    const loadOrders = async () => {
+      try {
+        const res = await orderAPI.getAllOrders();
+        setOrders(res.data.data);
+      } catch {
+        setOrders([]);
+      }
+      setLoading(false);
+    };
+
+    loadOrders();
   }, []);
 
-  // only count delivered orders as revenue (not pending/cancelled)
-  const totalRevenue = orders
-    .filter((o) => o.status === 'Delivered')
-    .reduce((sum, o) => sum + o.totalAmount, 0);
-
-  const pendingOrders = orders.filter((o) => o.status === 'Pending').length;
-  const activeOrders = orders.filter(
-    (o) => !['Delivered', 'Pending'].includes(o.status)
-  ).length;
+  // go through orders once and count what we need for the stat cards
+  let totalRevenue = 0;
+  let pendingOrders = 0;
+  let activeOrders = 0;
+  for (const order of orders) {
+    if (order.status === 'Delivered') {
+      totalRevenue = totalRevenue + order.totalAmount; // only delivered orders count as revenue
+    } else if (order.status === 'Pending') {
+      pendingOrders = pendingOrders + 1;
+    } else {
+      activeOrders = activeOrders + 1; // Confirmed / Preparing / Out for Delivery
+    }
+  }
 
   const stats = [
     { label: 'Total Orders', value: orders.length, icon: '📦', color: 'bg-blue-50 text-blue-700' },

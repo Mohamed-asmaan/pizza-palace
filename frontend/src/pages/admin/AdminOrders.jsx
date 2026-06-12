@@ -17,13 +17,15 @@ const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchOrders = () => {
+  const fetchOrders = async () => {
     setLoading(true);
-    orderAPI
-      .getAllOrders()
-      .then((res) => setOrders(res.data.data))
-      .catch(() => toast.error('Failed to load orders'))
-      .finally(() => setLoading(false));
+    try {
+      const res = await orderAPI.getAllOrders();
+      setOrders(res.data.data);
+    } catch {
+      toast.error('Failed to load orders');
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -37,7 +39,11 @@ const AdminOrders = () => {
       toast.success('Order status updated');
       fetchOrders();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Update failed');
+      let message = 'Update failed';
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      toast.error(message);
     }
   };
 
@@ -47,7 +53,11 @@ const AdminOrders = () => {
       toast.success('Order cancelled');
       fetchOrders();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Cancel failed');
+      let message = 'Cancel failed';
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      toast.error(message);
     }
   };
 
