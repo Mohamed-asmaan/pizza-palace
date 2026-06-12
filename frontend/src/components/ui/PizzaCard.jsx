@@ -4,16 +4,10 @@
 // ============================================
 
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { formatPrice } from '@/utils/format';
 
 const PizzaCard = ({ pizza }) => (
-  <motion.div
-    layout
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="card hover:shadow-lg transition-shadow"
-  >
+  <div className="card hover:shadow-lg transition-shadow">
     <Link to={`/pizza/${pizza._id}`} aria-label={`View ${pizza.name} details`}>
       <img
         src={pizza.imageUrl}
@@ -30,7 +24,7 @@ const PizzaCard = ({ pizza }) => (
         <p className="text-primary font-bold text-lg">{formatPrice(pizza.price)}</p>
       </div>
     </Link>
-  </motion.div>
+  </div>
 );
 
 export default PizzaCard;

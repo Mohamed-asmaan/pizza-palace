@@ -3,7 +3,6 @@
 // Category buttons call API with filter; search filters results on the client
 // ============================================
 import { useEffect, useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { pizzaAPI } from '@/services/api';
 import { CATEGORIES } from '@/constants/catalog';
 import PizzaCard from '@/components/ui/PizzaCard';
@@ -41,7 +40,7 @@ const Menu = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      <div>
         <h1 className="text-3xl font-bold text-neutral-dark mb-2">Our Menu</h1>
         <p className="text-gray-600 mb-6">Explore our full pizza catalogue</p>
 
@@ -90,7 +89,7 @@ const Menu = () => {
             ))}
           </div>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 };

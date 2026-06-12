@@ -5,7 +5,6 @@
 // ============================================
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import useCart from '@/hooks/useCart';
 import useAuth from '@/hooks/useAuth';
@@ -128,12 +127,7 @@ const Checkout = () => {
       <h1 className="text-3xl font-bold text-neutral-dark mb-8">Checkout</h1>
 
       <div className="grid md:grid-cols-2 gap-8">
-        <motion.form
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          onSubmit={handlePlaceOrder}
-          className="card p-6"
-        >
+        <form onSubmit={handlePlaceOrder} className="card p-6">
           <h2 className="text-xl font-bold mb-4">Delivery Address</h2>
           <textarea
             value={deliveryAddress}
@@ -173,9 +167,9 @@ const Checkout = () => {
           <Link to="/cart" className="block text-center text-primary mt-3 hover:underline">
             ← Back to Cart
           </Link>
-        </motion.form>
+        </form>
 
-        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="card p-6">
+        <div className="card p-6">
           <h2 className="text-xl font-bold mb-4">Order Summary</h2>
           <div className="space-y-3 mb-4">
             {items.map(({ pizza, qty }) => (
@@ -191,7 +185,7 @@ const Checkout = () => {
             <span>Total</span>
             <span className="text-primary">{formatPrice(total)}</span>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

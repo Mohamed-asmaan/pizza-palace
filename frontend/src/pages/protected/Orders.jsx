@@ -4,7 +4,6 @@
 // ============================================
 
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { orderAPI } from '@/services/api';
 import { formatPrice, formatDate } from '@/utils/format';
@@ -68,12 +67,7 @@ const Orders = () => {
 
       <div className="space-y-4">
         {orders.map((order) => (
-          <motion.div
-            key={order._id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="card p-6"
-          >
+          <div key={order._id} className="card p-6">
             <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
               <div>
                 <p className="text-sm text-gray-500">Order #{order._id.slice(-8).toUpperCase()}</p>
@@ -116,7 +110,7 @@ const Orders = () => {
                 </button>
               )}
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>

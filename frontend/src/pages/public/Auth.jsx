@@ -5,7 +5,6 @@
 
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { authAPI } from '@/services/api';
 import useAuth from '@/hooks/useAuth';
@@ -54,11 +53,7 @@ const Auth = () => {
 
   return (
     <div className="container mx-auto px-4 py-12 flex justify-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="card w-full max-w-md p-8"
-      >
+      <div className="card w-full max-w-md p-8">
         <div className="text-center mb-6">
           <span className="text-4xl" role="img" aria-hidden="true">
             🍕
@@ -141,7 +136,7 @@ const Auth = () => {
             ← Back to Home
           </Link>
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 };

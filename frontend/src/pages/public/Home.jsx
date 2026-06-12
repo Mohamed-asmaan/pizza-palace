@@ -5,7 +5,6 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { pizzaAPI } from '@/services/api';
 import PizzaCard from '@/components/ui/PizzaCard';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
@@ -27,12 +26,7 @@ const Home = () => {
     <div>
       <section className="bg-gradient-to-r from-primary to-secondary text-white">
         <div className="container mx-auto px-4 py-16 md:py-24">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-2xl"
-          >
+          <div className="max-w-2xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Fresh Pizzas, Delivered Hot
             </h1>
@@ -42,7 +36,7 @@ const Home = () => {
             <Link to="/menu" className="inline-block bg-white text-primary font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition-colors">
               Order Now
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
 

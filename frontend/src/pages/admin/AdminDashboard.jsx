@@ -5,7 +5,6 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { orderAPI } from '@/services/api';
 import { formatPrice } from '@/utils/format';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
@@ -53,14 +52,8 @@ const AdminDashboard = () => {
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className={`card p-6 ${stat.color}`}
-              >
+            {stats.map((stat) => (
+              <div key={stat.label} className={`card p-6 ${stat.color}`}>
                 <div className="flex items-center gap-3">
                   <span className="text-2xl" role="img" aria-hidden="true">
                     {stat.icon}
@@ -70,7 +63,7 @@ const AdminDashboard = () => {
                     <p className="text-2xl font-bold">{stat.value}</p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 

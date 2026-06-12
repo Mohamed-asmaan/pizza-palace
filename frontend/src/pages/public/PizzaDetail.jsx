@@ -6,7 +6,6 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { pizzaAPI } from '@/services/api';
 import useCart from '@/hooks/useCart';
@@ -59,11 +58,7 @@ const PizzaDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto"
-      >
+      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
         <img
           src={pizza.imageUrl}
           alt={pizza.name}
@@ -111,7 +106,7 @@ const PizzaDetail = () => {
             </Link>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

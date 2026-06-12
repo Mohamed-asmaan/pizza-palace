@@ -5,7 +5,6 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { pizzaAPI } from '@/services/api';
 import { formatPrice } from '@/utils/format';
@@ -179,97 +178,89 @@ const AdminPizzas = () => {
         </div>
       )}
 
-      <AnimatePresence>
-        {showModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-            onClick={() => setShowModal(false)}
+      {showModal && (
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            className="card p-6 w-full max-w-lg"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="pizza-modal-title"
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="card p-6 w-full max-w-lg"
-              onClick={(e) => e.stopPropagation()}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="pizza-modal-title"
-            >
-              <h2 id="pizza-modal-title" className="text-xl font-bold mb-4">
-                {editingId ? 'Edit Pizza' : 'Add New Pizza'}
-              </h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
+            <h2 id="pizza-modal-title" className="text-xl font-bold mb-4">
+              {editingId ? 'Edit Pizza' : 'Add New Pizza'}
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                name="name"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                placeholder="Pizza name"
+                className="input-field"
+                required
+              />
+              <textarea
+                name="description"
+                value={form.description}
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                placeholder="Description"
+                className="input-field min-h-[80px]"
+                required
+              />
+              <div className="grid grid-cols-2 gap-4">
                 <input
-                  name="name"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="Pizza name"
+                  name="price"
+                  type="number"
+                  min="0"
+                  value={form.price}
+                  onChange={(e) => setForm({ ...form, price: e.target.value })}
+                  placeholder="Price (INR)"
                   className="input-field"
                   required
                 />
-                <textarea
-                  name="description"
-                  value={form.description}
-                  onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  placeholder="Description"
-                  className="input-field min-h-[80px]"
-                  required
-                />
-                <div className="grid grid-cols-2 gap-4">
-                  <input
-                    name="price"
-                    type="number"
-                    min="0"
-                    value={form.price}
-                    onChange={(e) => setForm({ ...form, price: e.target.value })}
-                    placeholder="Price (INR)"
-                    className="input-field"
-                    required
-                  />
-                  <select
-                    value={form.category}
-                    onChange={(e) => setForm({ ...form, category: e.target.value })}
-                    className="input-field"
-                  >
-                    {CATEGORIES.filter((c) => c !== 'All').map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <input
-                  name="imageUrl"
-                  value={form.imageUrl}
-                  onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-                  placeholder="Image URL"
+                <select
+                  value={form.category}
+                  onChange={(e) => setForm({ ...form, category: e.target.value })}
                   className="input-field"
-                  required
+                >
+                  {CATEGORIES.filter((c) => c !== 'All').map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <input
+                name="imageUrl"
+                value={form.imageUrl}
+                onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
+                placeholder="Image URL"
+                className="input-field"
+                required
+              />
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={form.isAvailable}
+                  onChange={(e) => setForm({ ...form, isAvailable: e.target.checked })}
                 />
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={form.isAvailable}
-                    onChange={(e) => setForm({ ...form, isAvailable: e.target.checked })}
-                  />
-                  Available on menu
-                </label>
-                <div className="flex gap-3">
-                  <button type="submit" className="btn-primary flex-1">
-                    {editingId ? 'Update' : 'Create'}
-                  </button>
-                  <button type="button" onClick={() => setShowModal(false)} className="flex-1 border rounded-lg py-2">
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                Available on menu
+              </label>
+              <div className="flex gap-3">
+                <button type="submit" className="btn-primary flex-1">
+                  {editingId ? 'Update' : 'Create'}
+                </button>
+                <button type="button" onClick={() => setShowModal(false)} className="flex-1 border rounded-lg py-2">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

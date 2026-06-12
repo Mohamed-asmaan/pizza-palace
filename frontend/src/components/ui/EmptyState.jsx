@@ -1,14 +1,9 @@
 // EmptyState.jsx - friendly message when list is empty (cart, menu, orders)
 
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 
 const EmptyState = ({ icon, title, description, actionLabel, actionLink }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="flex flex-col items-center justify-center py-16 px-4 text-center"
-  >
+  <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
     <div className="text-6xl mb-4" role="img" aria-hidden="true">
       {icon}
     </div>
@@ -19,7 +14,7 @@ const EmptyState = ({ icon, title, description, actionLabel, actionLink }) => (
         {actionLabel}
       </Link>
     )}
-  </motion.div>
+  </div>
 );
 
 export default EmptyState;

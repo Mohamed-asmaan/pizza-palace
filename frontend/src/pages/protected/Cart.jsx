@@ -4,7 +4,6 @@
 // ============================================
 
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import useCart from '@/hooks/useCart';
 import { formatPrice } from '@/utils/format';
@@ -38,13 +37,7 @@ const Cart = () => {
 
       <div className="space-y-4 mb-8">
         {items.map(({ pizza, qty }) => (
-          <motion.div
-            key={pizza._id}
-            layout
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="card p-4 flex gap-4 items-center"
-          >
+          <div key={pizza._id} className="card p-4 flex gap-4 items-center">
             <img src={pizza.imageUrl} alt={pizza.name} className="w-20 h-20 object-cover rounded-lg" />
             <div className="flex-1 min-w-0">
               <h3 className="font-bold truncate">{pizza.name}</h3>
@@ -78,7 +71,7 @@ const Cart = () => {
             >
               ✕
             </button>
-          </motion.div>
+          </div>
         ))}
       </div>
 
