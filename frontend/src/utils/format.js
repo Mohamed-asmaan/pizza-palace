@@ -5,6 +5,9 @@ export const formatPrice = (price) =>
     maximumFractionDigits: 0,
   }).format(price);
 
+// turn "BBQ Chicken Supreme" into "bbq-chicken-supreme" for nice URLs
+export const makeSlug = (name) => name.toLowerCase().split(' ').join('-');
+
 export const formatDate = (date) =>
   new Intl.DateTimeFormat('en-IN', {
     dateStyle: 'medium',

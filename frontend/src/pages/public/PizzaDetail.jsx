@@ -1,7 +1,7 @@
 // ============================================
 // PizzaDetail.jsx - SINGLE PIZZA PAGE
-// URL: /pizza/:id  (id comes from Menu or Home card link)
-// Flow: load pizza from API → pick quantity → add to cart (login required)
+// URL: /pizza/:name  (pizza name in slug form, e.g. /pizza/bbq-chicken-supreme)
+// Flow: load pizzas from API → find the one matching the URL name → add to cart
 // ============================================
 
 import { useEffect, useState } from 'react';
@@ -10,11 +10,11 @@ import toast from 'react-hot-toast';
 import { pizzaAPI } from '@/services/api';
 import useCart from '@/hooks/useCart';
 import useAuth from '@/hooks/useAuth';
-import { formatPrice } from '@/utils/format';
+import { formatPrice, makeSlug } from '@/utils/format';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
 
 const PizzaDetail = () => {
-  const { id } = useParams(); // pizza id from URL
+  const { name } = useParams(); // pizza name from URL (slug form, e.g. "bbq-chicken-supreme")
   const navigate = useNavigate();
   const { addToCart } = useCart(); // Redux cart via context hook
   const { isAuthenticated } = useAuth();
@@ -22,12 +22,19 @@ const PizzaDetail = () => {
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
 
-  // fetch pizza when page opens or when URL id changes
+  // fetch pizzas and pick the one whose name matches the URL
   useEffect(() => {
     const loadPizza = async () => {
       try {
-        const res = await pizzaAPI.getById(id);
-        setPizza(res.data.data);
+        const res = await pizzaAPI.getAll();
+        const found = res.data.data.find((p) => makeSlug(p.name) === name);
+
+        if (found) {
+          setPizza(found);
+        } else {
+          toast.error('Pizza not found');
+          navigate('/menu');
+        }
       } catch {
         toast.error('Pizza not found');
         navigate('/menu');
@@ -36,14 +43,14 @@ const PizzaDetail = () => {
     };
 
     loadPizza();
-  }, [id, navigate]);
+  }, [name, navigate]);
 
   const handleAddToCart = () => {
     // cart is stored per user session — must be logged in
     if (!isAuthenticated) {
       toast.error('Please login to add items to cart');
       // after login, send user back to this pizza page
-      navigate('/auth', { state: { from: { pathname: `/pizza/${id}` } } });
+      navigate('/auth', { state: { from: { pathname: `/pizza/${name}` } } });
       return;
     }
     addToCart(pizza, qty); // saves to Redux + localStorage

@@ -4,11 +4,11 @@
 // ============================================
 
 import { Link } from 'react-router-dom';
-import { formatPrice } from '@/utils/format';
+import { formatPrice, makeSlug } from '@/utils/format';
 
 const PizzaCard = ({ pizza }) => (
   <div className="card hover:shadow-lg transition-shadow">
-    <Link to={`/pizza/${pizza._id}`} aria-label={`View ${pizza.name} details`}>
+    <Link to={`/pizza/${makeSlug(pizza.name)}`} aria-label={`View ${pizza.name} details`}>
       <img
         src={pizza.imageUrl}
         alt={pizza.name}

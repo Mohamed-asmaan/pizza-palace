@@ -17,7 +17,7 @@ const AppRoutes = () => (
     {/* Public */}
     <Route path="/" element={<Home />} />
     <Route path="/menu" element={<Menu />} />
-    <Route path="/pizza/:id" element={<PizzaDetail />} />
+    <Route path="/pizza/:name" element={<PizzaDetail />} />
     <Route path="/auth" element={<Auth />} />
 
     {/* Protected (login required) */}
