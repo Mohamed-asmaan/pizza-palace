@@ -1,195 +1,142 @@
-# Pizza Palace
+# 🍕 Pizza Palace
 
-Full-stack pizza ordering app with customer checkout, order history, and an admin dashboard. Built with the MERN stack and Razorpay test payments.
+A full-stack pizza ordering web application built with the **MERN stack**. Customers can browse the menu, manage a cart, and pay online with Razorpay, while admins manage pizzas and orders from a dedicated dashboard.
+
+**Live demo:** [pizza-palace-gules.vercel.app](https://pizza-palace-gules.vercel.app)
+
+---
 
 ## Features
 
-**Customers**
-- Browse menu with category filters
-- View pizza details and add items to cart
-- Register / login with JWT authentication
-- Checkout with Razorpay (test mode) or cash on delivery
-- View and cancel orders
-
-**Admins**
-- Dashboard overview
-- Manage pizzas (create, edit, delete, availability)
-- View all orders and update order status
-
-**Platform**
-- Auto-seeds menu on first backend start (empty database)
-- Optional auto-creation of an admin account via env vars
-- Protected routes for logged-in users; admin-only routes for management pages
-- Cart persisted in `localStorage`; auth session persisted across refresh
+- 🛒 Browse pizzas by category, view details, and add to cart
+- 🔐 JWT-based register / login with persistent sessions
+- 💳 Online payments via Razorpay (test mode) or cash on delivery
+- 📦 Order history with status tracking and cancellation
+- 🛠️ Admin dashboard — manage pizzas, availability, and order statuses
+- 🌱 Auto-seeds the menu on first run with an empty database
 
 ## Tech Stack
 
-| Layer | Technologies |
-|-------|--------------|
-| Frontend | React 19, Vite, React Router, Redux Toolkit, Tailwind CSS, Axios, Framer Motion |
-| Backend | Node.js, Express 5, MongoDB, Mongoose, JWT, bcrypt, express-validator |
-| Payments | Razorpay (test keys) |
-| Deploy | Vercel (frontend), Render (API) |
+| Layer    | Technologies                                                          |
+| -------- | --------------------------------------------------------------------- |
+| Frontend | React 19, Vite, Redux Toolkit, React Router 7, Tailwind CSS, Axios    |
+| Backend  | Node.js, Express 5, MongoDB, Mongoose, JWT, bcrypt, express-validator |
+| Payments | Razorpay                                                              |
+| Hosting  | Vercel (frontend) · Render (API)                                      |
 
-## Project Structure
+## Getting Started
 
-```
-Pizza Ecom/
-├── backend/                 # Express API
-│   ├── controllers/         # Route handlers
-│   ├── middleware/          # Auth, validation, errors
-│   ├── models/              # User, Pizza, Order
-│   ├── routes/              # auth, pizzas, orders, payments
-│   ├── utils/               # Catalog seed, order helpers
-│   └── server.js            # App entry point
-├── frontend/                # React SPA
-│   └── src/
-│       ├── app/             # App shell + routes
-│       ├── components/      # Layout, UI, route guards
-│       ├── hooks/           # useAuth, useCart
-│       ├── pages/           # public / protected / admin
-│       ├── services/        # Axios API client
-│       ├── store/           # Redux slices
-│       └── utils/           # Formatting, Razorpay helpers
-└── vercel.json              # Frontend deploy config
-```
-
-## Prerequisites
+### Prerequisites
 
 - Node.js 18+
-- MongoDB (local or Atlas)
-- Razorpay test keys (optional — without them checkout uses COD only)
+- MongoDB (local or [Atlas](https://www.mongodb.com/atlas))
+- Razorpay test keys *(optional — checkout falls back to cash on delivery)*
 
-## Local Setup
-
-### 1. Clone and install
+### 1. Clone & install
 
 ```bash
-git clone <repo-url>
-cd "Pizza Ecom"
+git clone https://github.com/Mohamed-asmaan/pizza-palace.git
+cd pizza-palace
 
 cd backend && npm install
 cd ../frontend && npm install
 ```
 
-### 2. Backend environment
+### 2. Configure the backend
 
-Copy `backend/.env.example` to `backend/.env` and configure:
+Create `backend/.env` (see `backend/.env.example`):
 
 ```env
 MONGO_URI=mongodb://localhost:27017/pizza-palace
 JWT_SECRET=your_secret_here
 PORT=5000
-NODE_ENV=development
 CLIENT_URL=http://localhost:5173
 
-# Optional — enables Razorpay test checkout
+# Optional — Razorpay test checkout
 RAZORPAY_KEY_ID=rzp_test_xxxxxxxx
 RAZORPAY_KEY_SECRET=your_test_secret
 
-# Optional — creates admin on first run if no user exists
+# Optional — auto-create an admin on first run
 ADMIN_EMAIL=admin@example.com
 ADMIN_PASSWORD=admin123456
-ADMIN_NAME=Admin
 ```
 
-Start the API:
+### 3. Configure the frontend
 
-```bash
-cd backend
-npm run dev
-```
-
-The server runs at `http://localhost:5000`. Health check: `GET /api/health`.
-
-On first connect to an empty database, the backend seeds default pizzas automatically.
-
-### 3. Frontend environment
-
-Copy `frontend/.env.example` to `frontend/.env`:
+Create `frontend/.env` (see `frontend/.env.example`):
 
 ```env
 VITE_API_URL=http://localhost:5000/api
 ```
 
-Start the dev server:
+### 4. Run
 
 ```bash
-cd frontend
-npm run dev
+# Terminal 1 — API on http://localhost:5000
+cd backend && npm run dev
+
+# Terminal 2 — app on http://localhost:5173
+cd frontend && npm run dev
 ```
 
-Open `http://localhost:5173`.
+The backend seeds default pizzas automatically when the database is empty. Health check: `GET /api/health`.
 
-### 4. Create accounts
+## API Endpoints
 
-- **Customer:** register at `/auth`
-- **Admin:** set `ADMIN_EMAIL` / `ADMIN_PASSWORD` in backend `.env` and restart, or manually set `role: "admin"` on a user in MongoDB
+Base URL: `/api` — authenticated routes expect `Authorization: Bearer <token>`.
 
-## Scripts
+| Group    | Endpoints                                                                                  |
+| -------- | ------------------------------------------------------------------------------------------ |
+| Auth     | `POST /auth/register` · `POST /auth/login` · `GET /auth/profile` · `PUT /auth/profile`      |
+| Pizzas   | `GET /pizzas` · `GET /pizzas/:id` · `POST /pizzas`* · `PUT /pizzas/:id`* · `DELETE /pizzas/:id`* |
+| Orders   | `POST /orders` · `GET /orders/my` · `GET /orders`* · `PUT /orders/:id/status`* · `DELETE /orders/:id` |
+| Payments | `GET /payments/config` · `POST /payments/create-order` · `POST /payments/verify`            |
 
-| Location | Command | Description |
-|----------|---------|-------------|
-| `backend/` | `npm run dev` | Start API with nodemon |
-| `backend/` | `npm start` | Start API (production) |
-| `frontend/` | `npm run dev` | Vite dev server |
-| `frontend/` | `npm run build` | Production build → `frontend/dist` |
-| `frontend/` | `npm run preview` | Preview production build |
+\* Admin only
 
-## Frontend Routes
+## App Routes
 
-| Path | Access | Page |
-|------|--------|------|
-| `/` | Public | Home |
-| `/menu` | Public | Menu |
-| `/pizza/:id` | Public | Pizza detail |
-| `/auth` | Public | Login / register |
-| `/cart` | Logged in | Cart |
-| `/checkout` | Logged in | Checkout |
-| `/orders` | Logged in | My orders |
-| `/admin` | Admin | Dashboard |
-| `/admin/pizzas` | Admin | Manage menu |
-| `/admin/orders` | Admin | Manage orders |
+| Path            | Access    | Page                  |
+| --------------- | --------- | --------------------- |
+| `/`             | Public    | Home                  |
+| `/menu`         | Public    | Menu                  |
+| `/pizza/:id`    | Public    | Pizza details         |
+| `/auth`         | Public    | Login / register      |
+| `/cart`         | Logged in | Cart                  |
+| `/checkout`     | Logged in | Checkout              |
+| `/orders`       | Logged in | My orders             |
+| `/admin`        | Admin     | Dashboard             |
+| `/admin/pizzas` | Admin     | Manage menu           |
+| `/admin/orders` | Admin     | Manage orders         |
 
-Route guards live in `frontend/src/components/guards/` (`ProtectedRoute`, `AdminRoute`). Auth state is managed via Redux (`useAuth` hook + `authSlice`).
+## Project Structure
 
-## API Overview
-
-Base URL: `/api`
-
-| Group | Endpoints |
-|-------|-----------|
-| **Auth** | `POST /auth/register`, `POST /auth/login`, `GET /auth/profile`, `PUT /auth/profile` |
-| **Pizzas** | `GET /pizzas`, `GET /pizzas/:id`, `POST /pizzas` (admin), `PUT /pizzas/:id` (admin), `DELETE /pizzas/:id` (admin) |
-| **Orders** | `POST /orders`, `GET /orders/my`, `GET /orders` (admin), `PUT /orders/:id/status` (admin), `DELETE /orders/:id` |
-| **Payments** | `GET /payments/config`, `POST /payments/create-order`, `POST /payments/verify` |
-
-Authenticated requests send `Authorization: Bearer <token>`. The frontend attaches the token automatically from `localStorage`.
+```
+pizza-palace/
+├── backend/             # Express REST API
+│   ├── controllers/     # Route handlers
+│   ├── middleware/      # Auth, validation, error handling
+│   ├── models/          # User, Pizza, Order schemas
+│   ├── routes/          # auth, pizzas, orders, payments
+│   ├── utils/           # Menu seeding, order helpers
+│   └── server.js        # Entry point
+├── frontend/            # React SPA (Vite)
+│   └── src/
+│       ├── app/         # App shell + routing
+│       ├── components/  # Layout, UI, route guards
+│       ├── hooks/       # useAuth, useCart
+│       ├── pages/       # public / protected / admin
+│       ├── services/    # Axios API client
+│       ├── store/       # Redux slices
+│       └── utils/       # Formatters, Razorpay helpers
+└── vercel.json          # Frontend deploy config
+```
 
 ## Deployment
 
-**Frontend (Vercel)** — `vercel.json` builds from `frontend/` and serves the SPA with client-side routing.
-
-Set in Vercel:
-
-```env
-VITE_API_URL=https://your-api.onrender.com/api
-```
-
-**Backend (Render or similar)** — deploy `backend/` with:
-
-- `MONGO_URI` (Atlas connection string)
-- `JWT_SECRET`
-- `CLIENT_URL` (comma-separated frontend URLs for CORS)
-- `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` (optional)
-- `ADMIN_EMAIL` / `ADMIN_PASSWORD` (optional)
-
-## Payment Flow
-
-1. Checkout calls `GET /payments/config` to check if Razorpay is enabled.
-2. If enabled: create Razorpay order → open checkout widget → verify signature → save order.
-3. If disabled: place order directly with `POST /orders` (cash on delivery).
+- **Frontend (Vercel):** builds from `frontend/` via `vercel.json`. Set `VITE_API_URL` to your deployed API URL.
+- **Backend (Render or similar):** deploy `backend/` with `MONGO_URI`, `JWT_SECRET`, and `CLIENT_URL` (comma-separated frontend URLs for CORS). Razorpay and admin variables are optional.
 
 ## License
 
-ISC (backend package). See individual `package.json` files for details.
+ISC
