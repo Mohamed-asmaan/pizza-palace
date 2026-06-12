@@ -7,10 +7,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 // make jwt token after login (valid 24 hours)
-const generateToken = (user) =>
-  jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
-    expiresIn: '24h',
-  });
+const generateToken = (user) => {
+  const payload = { id: user._id, email: user.email, role: user.role };
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' });
+};
 
 // POST /api/auth/register — new customer account + auto login token
 const register = async (req, res, next) => {
@@ -53,7 +53,19 @@ const login = async (req, res, next) => {
 
     // select('+password') needed because password is hidden by default in schema
     const user = await User.findOne({ email }).select('+password');
-    if (!user || !(await user.comparePassword(password))) {
+
+    // step 1: no account with this email
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password',
+        statusCode: 401,
+      });
+    }
+
+    // step 2: wrong password
+    const passwordIsCorrect = await user.comparePassword(password);
+    if (!passwordIsCorrect) {
       return res.status(401).json({
         success: false,
         message: 'Invalid email or password',
